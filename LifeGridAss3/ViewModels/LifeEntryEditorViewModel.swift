@@ -25,15 +25,15 @@ final class LifeEntryEditorViewModel: ObservableObject {
             && !isSaving
     }
 
-    func save(lifeWeekNumber: Int) async {
-        guard canSave else { return }
+    func save(lifeWeekNumber: Int) async -> LifeEntry? {
+        guard canSave else { return nil }
         isSaving = true
         errorMessage = nil
         savedMessage = nil
         defer { isSaving = false }
 
         do {
-            try await recordLifeEntry.execute(
+            let entry = try await recordLifeEntry.execute(
                 message: message,
                 emotionalState: emotionalState,
                 lifeWeekNumber: lifeWeekNumber
@@ -41,6 +41,7 @@ final class LifeEntryEditorViewModel: ObservableObject {
             message = ""
             emotionalState = nil
             savedMessage = "Your reflection is saved privately."
+            return entry
         } catch let error as LocalizedError {
             errorMessage = [error.errorDescription, error.recoverySuggestion]
                 .compactMap { $0 }
@@ -48,5 +49,7 @@ final class LifeEntryEditorViewModel: ObservableObject {
         } catch {
             errorMessage = "Your reflection could not be saved. Please try again."
         }
+
+        return nil
     }
 }

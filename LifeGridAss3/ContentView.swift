@@ -35,6 +35,9 @@ struct ContentView: View {
                     profile: profile,
                     recordLifeEntry: RecordLifeEntryUseCase(
                         repository: lifeEntryRepository
+                    ),
+                    loadLifeEntries: LoadLifeEntriesForWeekUseCase(
+                        repository: lifeEntryRepository
                     )
                 )
 

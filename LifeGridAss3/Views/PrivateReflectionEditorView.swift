@@ -3,10 +3,12 @@ import SwiftUI
 struct PrivateReflectionEditorView: View {
     @StateObject private var viewModel: LifeEntryEditorViewModel
     let lifeWeekNumber: Int
+    let onSaved: (LifeEntry) -> Void
 
     init(
         recordLifeEntry: RecordLifeEntryUseCase,
-        lifeWeekNumber: Int
+        lifeWeekNumber: Int,
+        onSaved: @escaping (LifeEntry) -> Void
     ) {
         _viewModel = StateObject(
             wrappedValue: LifeEntryEditorViewModel(
@@ -14,6 +16,7 @@ struct PrivateReflectionEditorView: View {
             )
         )
         self.lifeWeekNumber = lifeWeekNumber
+        self.onSaved = onSaved
     }
 
     var body: some View {
@@ -67,7 +70,11 @@ struct PrivateReflectionEditorView: View {
 
             Button {
                 Task {
-                    await viewModel.save(lifeWeekNumber: lifeWeekNumber)
+                    if let entry = await viewModel.save(
+                        lifeWeekNumber: lifeWeekNumber
+                    ) {
+                        onSaved(entry)
+                    }
                 }
             } label: {
                 HStack {
