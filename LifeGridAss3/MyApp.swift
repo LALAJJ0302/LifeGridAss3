@@ -11,6 +11,7 @@ import SwiftUI
     )
     private let treeHolePostRepository = CloudKitTreeHolePostRepository()
     private let supportReplyRepository = CloudKitSupportReplyRepository()
+    private let sharedDraftRepository = AppGroupSharedReflectionDraftRepository()
 
     var body: some Scene {
         WindowGroup {
@@ -18,7 +19,8 @@ import SwiftUI
                 profileRepository: profileRepository,
                 lifeEntryRepository: lifeEntryRepository,
                 treeHolePostRepository: treeHolePostRepository,
-                supportReplyRepository: supportReplyRepository
+                supportReplyRepository: supportReplyRepository,
+                sharedDraftRepository: sharedDraftRepository
             )
         }
     }

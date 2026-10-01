@@ -6,17 +6,20 @@ struct ContentView: View {
     private let lifeEntryRepository: any LifeEntrySyncRepository
     private let treeHolePostRepository: any TreeHolePostRepository
     private let supportReplyRepository: any SupportReplyRepository
+    private let sharedDraftRepository: any SharedReflectionDraftRepository
 
     init(
         profileRepository: any UserProfileSyncRepository,
         lifeEntryRepository: any LifeEntrySyncRepository,
         treeHolePostRepository: any TreeHolePostRepository,
-        supportReplyRepository: any SupportReplyRepository
+        supportReplyRepository: any SupportReplyRepository,
+        sharedDraftRepository: any SharedReflectionDraftRepository
     ) {
         self.profileRepository = profileRepository
         self.lifeEntryRepository = lifeEntryRepository
         self.treeHolePostRepository = treeHolePostRepository
         self.supportReplyRepository = supportReplyRepository
+        self.sharedDraftRepository = sharedDraftRepository
         _viewModel = StateObject(
             wrappedValue: AppViewModel(profileRepository: profileRepository)
         )
@@ -63,6 +66,17 @@ struct ContentView: View {
                     )
                     .tabItem {
                         Label("Tree Hole", systemImage: "bubble.left.and.bubble.right.fill")
+                    }
+
+                    SharedDraftInboxView(
+                        profile: profile,
+                        recordLifeEntry: RecordLifeEntryUseCase(
+                            repository: lifeEntryRepository
+                        ),
+                        draftRepository: sharedDraftRepository
+                    )
+                    .tabItem {
+                        Label("Shared Drafts", systemImage: "square.and.arrow.down.fill")
                     }
                 }
 

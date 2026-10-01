@@ -14,7 +14,7 @@ Assignment 2 supplied the basic application idea. This project is a new Xcode pr
 - anonymous supportive replies;
 - sexual/violent-content checks at the public-sharing use-case boundary;
 - loading, empty, failure, retry, character-limit, and offline states;
-- in-memory preview repositories and 35 unit tests.
+- in-memory preview repositories and 38 unit tests.
 
 ## System extensions
 
@@ -28,6 +28,19 @@ The Widget gives someone a private, glanceable check-in without requiring them t
 - Shared value: `LifeGridWidgetSnapshot`
 
 The main app writes the snapshot after loading or saving the current week's reflections and then calls `WidgetCenter.shared.reloadTimelines(ofKind:)`. The Widget also requests a new timeline shortly after midnight so the life-week calculation stays current.
+
+### Save to LifeGrid Share Extension
+
+The Share Extension lets someone capture meaningful text or a web link from apps such as Safari and Notes without interrupting the moment to manually copy and paste. It accepts plain text and one web URL, then stores a `SharedReflectionDraft` in the same App Group.
+
+The extension never writes a final `LifeEntry` and never publishes to the Tree Hole. In the main app, the **Shared Drafts** inbox requires the person to:
+
+1. open the received draft;
+2. review or edit its text;
+3. optionally choose an emotional label;
+4. explicitly select **Save privately**.
+
+After a successful import, the draft is removed from the App Group inbox and the Widget timeline is refreshed. Posting completes with `completeRequest`; cancellation and unsupported content terminate with `cancelRequest`, so the host share sheet is always dismissed correctly.
 
 ## Privacy boundary
 
@@ -45,6 +58,12 @@ SupportReply
   -> safety check
   -> CloudKit public database
   -> references only the public TreeHolePost ID
+
+Text or URL from another app
+  -> Share Extension
+  -> SharedReflectionDraft in App Group
+  -> explicit review in LifeGrid
+  -> private LifeEntry
 ```
 
 Publishing never moves, modifies, or deletes the original private reflection.
@@ -68,8 +87,9 @@ The project uses dependency inversion so that UI and business rules do not depen
 1. Open `LifeGridAss3.xcodeproj` in Xcode.
 2. Select the `LifeGridAss3` scheme and an iPhone simulator with iOS 27 or later.
 3. In **Signing & Capabilities**, choose a development team and keep iCloud/CloudKit enabled.
-4. Press **Command-B** to build and **Command-R** to run.
-5. Press **Command-U** to run the test suite.
+4. Confirm the app, `LifeGridWidget`, and `LifeGridShareExtension` targets all use App Group `group.LALAJJ0302.com.LifeGridAss3`.
+5. Press **Command-B** to build and **Command-R** to run.
+6. Press **Command-U** to run the test suite.
 
 The home-screen preview does not require iCloud or internet because it uses repositories in `PreviewSupport/PreviewRepositories.swift`.
 
@@ -92,6 +112,7 @@ Verified in Xcode on 1 October 2026:
 
 - app build succeeded;
 - interactive SwiftUI preview rendered;
-- **35 tests passed**, including App Group Widget snapshot persistence.
+- both extensions were embedded and validated in the main app bundle;
+- **38 tests passed**, including Widget snapshot persistence, Share Extension draft persistence, and reviewed private import.
 
 See `DEBUGGING.md` for common Xcode, simulator, preview, and CloudKit troubleshooting steps.
