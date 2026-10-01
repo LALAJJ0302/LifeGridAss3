@@ -7,7 +7,7 @@ import Foundation
 struct LifeEntry: Identifiable, Codable, Equatable, Sendable {
     let id: UUID
     let message: String
-    let emotionalState: EmotionalState
+    let emotionalState: EmotionalState?
     let occurredAt: Date
     let createdAt: Date
     let updatedAt: Date
@@ -17,7 +17,7 @@ struct LifeEntry: Identifiable, Codable, Equatable, Sendable {
     init(
         id: UUID = UUID(),
         message: String,
-        emotionalState: EmotionalState,
+        emotionalState: EmotionalState? = nil,
         occurredAt: Date = .now,
         createdAt: Date = .now,
         updatedAt: Date? = nil,

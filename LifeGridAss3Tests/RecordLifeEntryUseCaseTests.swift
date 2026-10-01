@@ -24,6 +24,23 @@ struct RecordLifeEntryUseCaseTests {
         #expect(savedEntries == [entry])
     }
 
+    @Test("A private reflection does not require an emotional label")
+    func unlabeledReflectionIsSaved() async throws {
+        let repository = MockLifeEntryRepository()
+        let useCase = RecordLifeEntryUseCase(repository: repository)
+
+        let entry = try await useCase.execute(
+            message: "I do not know how to name this feeling yet.",
+            emotionalState: nil,
+            occurredAt: now,
+            lifeWeekNumber: 1_250,
+            now: now
+        )
+
+        #expect(entry.emotionalState == nil)
+        #expect(await repository.savedEntries() == [entry])
+    }
+
     @Test("Whitespace cannot become an empty private reflection")
     func whitespaceOnlyReflectionIsRejected() async {
         let repository = MockLifeEntryRepository()

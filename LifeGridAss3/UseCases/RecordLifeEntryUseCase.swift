@@ -14,7 +14,7 @@ struct RecordLifeEntryUseCase {
     @discardableResult
     func execute(
         message: String,
-        emotionalState: EmotionalState,
+        emotionalState: EmotionalState?,
         occurredAt: Date = .now,
         lifeWeekNumber: Int,
         now: Date = .now

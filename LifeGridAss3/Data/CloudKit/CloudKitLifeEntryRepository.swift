@@ -75,7 +75,7 @@ actor CloudKitLifeEntryRepository: LifeEntryRepository {
 
     private func apply(_ entry: LifeEntry, to record: CKRecord) {
         record[Schema.Field.message] = entry.message
-        record[Schema.Field.emotionalState] = entry.emotionalState.rawValue
+        record[Schema.Field.emotionalState] = entry.emotionalState?.rawValue
         record[Schema.Field.occurredAt] = entry.occurredAt
         record[Schema.Field.createdAt] = entry.createdAt
         record[Schema.Field.updatedAt] = entry.updatedAt
@@ -87,8 +87,6 @@ actor CloudKitLifeEntryRepository: LifeEntryRepository {
         guard
             let id = UUID(uuidString: record.recordID.recordName),
             let message = record[Schema.Field.message] as? String,
-            let emotionalStateValue = record[Schema.Field.emotionalState] as? String,
-            let emotionalState = EmotionalState(rawValue: emotionalStateValue),
             let occurredAt = record[Schema.Field.occurredAt] as? Date,
             let createdAt = record[Schema.Field.createdAt] as? Date,
             let updatedAt = record[Schema.Field.updatedAt] as? Date,
@@ -96,6 +94,9 @@ actor CloudKitLifeEntryRepository: LifeEntryRepository {
         else {
             throw CloudKitLifeEntryRepositoryError.invalidRecord
         }
+
+        let emotionalState = (record[Schema.Field.emotionalState] as? String)
+            .flatMap(EmotionalState.init(rawValue:))
 
         return LifeEntry(
             id: id,
