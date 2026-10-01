@@ -1,7 +1,10 @@
 import SwiftUI
 
 @main struct LifeGridAss3App: App {
-    private let profileRepository = CloudKitUserProfileRepository()
+    private let profileRepository = OfflineFirstUserProfileRepository(
+        local: FileUserProfileRepository(),
+        remote: CloudKitUserProfileRepository()
+    )
 
     var body: some Scene {
         WindowGroup {

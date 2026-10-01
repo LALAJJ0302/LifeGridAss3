@@ -2,9 +2,9 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel: AppViewModel
-    private let profileRepository: any UserProfileRepository
+    private let profileRepository: any UserProfileSyncRepository
 
-    init(profileRepository: any UserProfileRepository) {
+    init(profileRepository: any UserProfileSyncRepository) {
         self.profileRepository = profileRepository
         _viewModel = StateObject(
             wrappedValue: AppViewModel(profileRepository: profileRepository)

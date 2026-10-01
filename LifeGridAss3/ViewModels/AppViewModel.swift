@@ -11,10 +11,10 @@ final class AppViewModel: ObservableObject {
     }
 
     @Published private(set) var phase: Phase = .loading
-    private let profileRepository: any UserProfileRepository
+    private let profileRepository: any UserProfileSyncRepository
     private var hasLoaded = false
 
-    init(profileRepository: any UserProfileRepository) {
+    init(profileRepository: any UserProfileSyncRepository) {
         self.profileRepository = profileRepository
     }
 
@@ -28,9 +28,13 @@ final class AppViewModel: ObservableObject {
             } else {
                 phase = .profileSetup
             }
+
+            Task { [weak self] in
+                await self?.synchronizeProfile()
+            }
         } catch {
             phase = .failed(
-                "We couldn't reach your private iCloud space. Check iCloud and try again."
+                "We couldn't open the protected profile stored on this device."
             )
         }
     }
@@ -43,5 +47,11 @@ final class AppViewModel: ObservableObject {
         hasLoaded = false
         phase = .loading
         await loadProfileIfNeeded()
+    }
+
+    private func synchronizeProfile() async {
+        if let synchronizedProfile = await profileRepository.synchronize() {
+            phase = .ready(synchronizedProfile)
+        }
     }
 }
