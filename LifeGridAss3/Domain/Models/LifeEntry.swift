@@ -10,6 +10,7 @@ struct LifeEntry: Identifiable, Codable, Equatable, Sendable {
     let emotionalState: EmotionalState
     let occurredAt: Date
     let createdAt: Date
+    let updatedAt: Date
     let lifeWeekNumber: Int
     let sharedAt: Date?
 
@@ -19,6 +20,7 @@ struct LifeEntry: Identifiable, Codable, Equatable, Sendable {
         emotionalState: EmotionalState,
         occurredAt: Date = .now,
         createdAt: Date = .now,
+        updatedAt: Date? = nil,
         lifeWeekNumber: Int,
         sharedAt: Date? = nil
     ) {
@@ -27,6 +29,7 @@ struct LifeEntry: Identifiable, Codable, Equatable, Sendable {
         self.emotionalState = emotionalState
         self.occurredAt = occurredAt
         self.createdAt = createdAt
+        self.updatedAt = updatedAt ?? createdAt
         self.lifeWeekNumber = lifeWeekNumber
         self.sharedAt = sharedAt
     }

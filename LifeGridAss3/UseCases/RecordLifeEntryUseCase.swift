@@ -45,6 +45,8 @@ struct RecordLifeEntryUseCase {
             message: trimmedMessage,
             emotionalState: emotionalState,
             occurredAt: occurredAt,
+            createdAt: now,
+            updatedAt: now,
             lifeWeekNumber: lifeWeekNumber
         )
 

@@ -12,6 +12,7 @@ actor CloudKitLifeEntryRepository: LifeEntryRepository {
             static let emotionalState = "emotionalState"
             static let occurredAt = "occurredAt"
             static let createdAt = "createdAt"
+            static let updatedAt = "updatedAt"
             static let lifeWeekNumber = "lifeWeekNumber"
             static let sharedAt = "sharedAt"
         }
@@ -77,6 +78,7 @@ actor CloudKitLifeEntryRepository: LifeEntryRepository {
         record[Schema.Field.emotionalState] = entry.emotionalState.rawValue
         record[Schema.Field.occurredAt] = entry.occurredAt
         record[Schema.Field.createdAt] = entry.createdAt
+        record[Schema.Field.updatedAt] = entry.updatedAt
         record[Schema.Field.lifeWeekNumber] = entry.lifeWeekNumber
         record[Schema.Field.sharedAt] = entry.sharedAt
     }
@@ -89,6 +91,7 @@ actor CloudKitLifeEntryRepository: LifeEntryRepository {
             let emotionalState = EmotionalState(rawValue: emotionalStateValue),
             let occurredAt = record[Schema.Field.occurredAt] as? Date,
             let createdAt = record[Schema.Field.createdAt] as? Date,
+            let updatedAt = record[Schema.Field.updatedAt] as? Date,
             let lifeWeekNumber = record[Schema.Field.lifeWeekNumber] as? Int
         else {
             throw CloudKitLifeEntryRepositoryError.invalidRecord
@@ -100,6 +103,7 @@ actor CloudKitLifeEntryRepository: LifeEntryRepository {
             emotionalState: emotionalState,
             occurredAt: occurredAt,
             createdAt: createdAt,
+            updatedAt: updatedAt,
             lifeWeekNumber: lifeWeekNumber,
             sharedAt: record[Schema.Field.sharedAt] as? Date
         )
