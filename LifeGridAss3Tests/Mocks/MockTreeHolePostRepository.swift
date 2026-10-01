@@ -2,7 +2,11 @@ import Foundation
 @testable import LifeGridAss3
 
 actor MockTreeHolePostRepository: TreeHolePostRepository {
-    private var storedPosts: [TreeHolePost] = []
+    private var storedPosts: [TreeHolePost]
+
+    init(posts: [TreeHolePost] = []) {
+        storedPosts = posts
+    }
 
     func publish(_ post: TreeHolePost) {
         storedPosts.append(post)

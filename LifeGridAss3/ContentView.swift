@@ -34,19 +34,33 @@ struct ContentView: View {
                 )
 
             case .ready(let profile):
-                LifeGridHomeView(
-                    profile: profile,
-                    recordLifeEntry: RecordLifeEntryUseCase(
-                        repository: lifeEntryRepository
-                    ),
-                    loadLifeEntries: LoadLifeEntriesForWeekUseCase(
-                        repository: lifeEntryRepository
-                    ),
-                    publishTreeHolePost: PublishTreeHolePostUseCase(
-                        repository: treeHolePostRepository,
-                        safetyChecker: RuleBasedContentSafetyChecker()
+                TabView {
+                    LifeGridHomeView(
+                        profile: profile,
+                        recordLifeEntry: RecordLifeEntryUseCase(
+                            repository: lifeEntryRepository
+                        ),
+                        loadLifeEntries: LoadLifeEntriesForWeekUseCase(
+                            repository: lifeEntryRepository
+                        ),
+                        publishTreeHolePost: PublishTreeHolePostUseCase(
+                            repository: treeHolePostRepository,
+                            safetyChecker: RuleBasedContentSafetyChecker()
+                        )
                     )
-                )
+                    .tabItem {
+                        Label("LifeGrid", systemImage: "square.grid.3x3.fill")
+                    }
+
+                    TreeHoleFeedView(
+                        loadPosts: LoadTreeHoleFeedUseCase(
+                            repository: treeHolePostRepository
+                        )
+                    )
+                    .tabItem {
+                        Label("Tree Hole", systemImage: "bubble.left.and.bubble.right.fill")
+                    }
+                }
 
             case .failed(let message):
                 ContentUnavailableView {
