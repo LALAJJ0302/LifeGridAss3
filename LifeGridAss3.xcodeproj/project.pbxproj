@@ -120,6 +120,11 @@
 				TargetAttributes = {
 					000000000000000100000000 = {
 						CreatedOnToolsVersion = 26.3;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					000000000000000100000001 = {
 						CreatedOnToolsVersion = 27.0;
@@ -317,6 +322,7 @@
 		000000000000000111000000 /* Debug configuration for PBXNativeTarget "LifeGridAss3" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = LifeGridAss3/LifeGridAss3.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LUP7G5CP9J;
@@ -380,6 +386,7 @@
 		000000000000000112000000 /* Release configuration for PBXNativeTarget "LifeGridAss3" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = LifeGridAss3/LifeGridAss3.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LUP7G5CP9J;
