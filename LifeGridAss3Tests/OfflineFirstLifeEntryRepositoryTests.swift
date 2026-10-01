@@ -24,6 +24,28 @@ struct OfflineFirstLifeEntryRepositoryTests {
         #expect(await local.entry(id: entry.id) == entry)
     }
 
+    @Test("A locally saved reflection uploads when CloudKit becomes available")
+    func localReflectionUploadsAfterCloudRecovery() async throws {
+        let local = MockLifeEntryRepository()
+        let remote = MockLifeEntryRepository()
+        await remote.forceSaveFailure()
+        let repository = OfflineFirstLifeEntryRepository(
+            local: local,
+            remote: remote
+        )
+        let entry = makeEntry(message: "Saved offline, then synchronized.")
+
+        try await repository.save(entry)
+        #expect(await local.entry(id: entry.id) == entry)
+        #expect(await remote.entry(id: entry.id) == nil)
+
+        await remote.allowSaving()
+        let synchronized = await repository.synchronize(forLifeWeek: week)
+
+        #expect(synchronized == [entry])
+        #expect(await remote.entry(id: entry.id) == entry)
+    }
+
     @Test("A newer cloud edit replaces an older local edit")
     func newerCloudEditWins() async {
         let localEntry = makeEntry(

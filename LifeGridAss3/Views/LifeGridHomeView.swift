@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct LifeGridHomeView: View {
+    @Environment(\.scenePhase) private var scenePhase
+
     let profile: UserProfile
     let recordLifeEntry: RecordLifeEntryUseCase
     let publishTreeHolePost: PublishTreeHolePostUseCase
@@ -67,15 +69,21 @@ struct LifeGridHomeView: View {
                 }
                 .padding(20)
             }
+            .refreshable {
+                await reloadCurrentWeek()
+            }
             .background(Color.indigo.opacity(0.05))
             .navigationTitle("LifeGrid")
         }
         .task(id: currentWeek) {
-            await entriesViewModel.load(lifeWeekNumber: currentWeek)
-            LifeGridWidgetCoordinator.refresh(
-                profile: profile,
-                hasReflectedThisWeek: !entriesViewModel.entries.isEmpty
-            )
+            await reloadCurrentWeek()
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else { return }
+
+            Task {
+                await reloadCurrentWeek()
+            }
         }
         .sheet(item: $entryForSharing) { entry in
             TreeHoleDraftView(
@@ -83,6 +91,15 @@ struct LifeGridHomeView: View {
                 publishPost: publishTreeHolePost
             )
         }
+    }
+
+    @MainActor
+    private func reloadCurrentWeek() async {
+        await entriesViewModel.load(lifeWeekNumber: currentWeek)
+        LifeGridWidgetCoordinator.refresh(
+            profile: profile,
+            hasReflectedThisWeek: !entriesViewModel.entries.isEmpty
+        )
     }
 
     @ViewBuilder

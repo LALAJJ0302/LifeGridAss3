@@ -45,6 +45,10 @@ actor MockLifeEntryRepository: LifeEntrySyncRepository {
         shouldFailWhenSaving = true
     }
 
+    func allowSaving() {
+        shouldFailWhenSaving = false
+    }
+
     func savedEntries() -> [LifeEntry] {
         storedEntries
     }
