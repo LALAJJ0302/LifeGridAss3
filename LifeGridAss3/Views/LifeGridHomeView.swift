@@ -165,3 +165,43 @@ struct LifeGridHomeView: View {
         .background(.background, in: RoundedRectangle(cornerRadius: 18))
     }
 }
+
+
+#Preview {
+    let profile = UserProfile(
+        birthDate: .now.addingTimeInterval(-25 * 365 * 24 * 60 * 60),
+        lifespanFrameYears: 80
+    )
+    let currentWeek = profile.weeksLived()
+    let lifeEntryRepository = PreviewLifeEntryRepository(
+        entries: [
+            LifeEntry(
+                message: "I made time to check in with myself today.",
+                emotionalState: .hopeful,
+                occurredAt: .now.addingTimeInterval(-3_600),
+                lifeWeekNumber: currentWeek
+            ),
+            LifeEntry(
+                message: "A quiet walk helped me feel more grounded.",
+                emotionalState: .calm,
+                occurredAt: .now.addingTimeInterval(-7_200),
+                lifeWeekNumber: currentWeek
+            )
+        ]
+    )
+    let treeHoleRepository = PreviewTreeHolePostRepository()
+
+    LifeGridHomeView(
+        profile: profile,
+        recordLifeEntry: RecordLifeEntryUseCase(
+            repository: lifeEntryRepository
+        ),
+        loadLifeEntries: LoadLifeEntriesForWeekUseCase(
+            repository: lifeEntryRepository
+        ),
+        publishTreeHolePost: PublishTreeHolePostUseCase(
+            repository: treeHoleRepository,
+            safetyChecker: RuleBasedContentSafetyChecker()
+        )
+    )
+}
