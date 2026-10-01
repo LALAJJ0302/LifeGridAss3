@@ -14,7 +14,7 @@ Assignment 2 supplied the basic application idea. This project is a new Xcode pr
 - anonymous supportive replies;
 - sexual/violent-content checks at the public-sharing use-case boundary;
 - loading, empty, failure, retry, character-limit, and offline states;
-- in-memory preview repositories and 38 unit tests.
+- in-memory preview repositories and 39 unit tests.
 
 ## System extensions
 
@@ -113,6 +113,6 @@ Verified in Xcode on 1 October 2026:
 - app build succeeded;
 - interactive SwiftUI preview rendered;
 - both extensions were embedded and validated in the main app bundle;
-- **38 tests passed**, including Widget snapshot persistence, Share Extension draft persistence, and reviewed private import.
+- **39 tests passed**, including offline CloudKit recovery, Widget snapshot persistence, Share Extension draft persistence, and reviewed private import.
 
 See `DEBUGGING.md` for common Xcode, simulator, preview, and CloudKit troubleshooting steps.
