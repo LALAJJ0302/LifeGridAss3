@@ -54,7 +54,13 @@ struct LifeGridHomeView: View {
                     PrivateReflectionEditorView(
                         recordLifeEntry: recordLifeEntry,
                         lifeWeekNumber: currentWeek,
-                        onSaved: entriesViewModel.entrySaved
+                        onSaved: { entry in
+                            entriesViewModel.entrySaved(entry)
+                            LifeGridWidgetCoordinator.refresh(
+                                profile: profile,
+                                hasReflectedThisWeek: true
+                            )
+                        }
                     )
 
                     currentWeekEntries
@@ -66,6 +72,10 @@ struct LifeGridHomeView: View {
         }
         .task(id: currentWeek) {
             await entriesViewModel.load(lifeWeekNumber: currentWeek)
+            LifeGridWidgetCoordinator.refresh(
+                profile: profile,
+                hasReflectedThisWeek: !entriesViewModel.entries.isEmpty
+            )
         }
         .sheet(item: $entryForSharing) { entry in
             TreeHoleDraftView(

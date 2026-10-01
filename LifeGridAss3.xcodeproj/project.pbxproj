@@ -6,6 +6,10 @@
 	objectVersion = 90;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		000000000000000160000000 /* LifeGridWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 000000000000000000000122 /* LifeGridWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		000000000000000150000001 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -14,11 +18,33 @@
 			remoteGlobalIDString = 000000000000000100000000;
 			remoteInfo = LifeGridAss3;
 		};
+		000000000000000150000003 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 000000000000000000000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 000000000000000100000002;
+			remoteInfo = LifeGridWidget;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		000000000000000140000003 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				000000000000000160000000 /* LifeGridWidget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* LifeGridAss3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LifeGridAss3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		000000000000000000000121 /* LifeGridAss3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LifeGridAss3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000122 /* LifeGridWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LifeGridWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -30,6 +56,16 @@
 		000000000000000000000011 /* LifeGridAss3Tests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = LifeGridAss3Tests;
+			sourceTree = "<group>";
+		};
+		000000000000000000000012 /* LifeGridWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LifeGridWidget;
+			sourceTree = "<group>";
+		};
+		000000000000000000000013 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -45,6 +81,13 @@
 			files = (
 			);
 		};
+		000000000000000130000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -53,6 +96,8 @@
 			children = (
 				000000000000000000000010 /* LifeGridAss3 */,
 				000000000000000000000011 /* LifeGridAss3Tests */,
+				000000000000000000000012 /* LifeGridWidget */,
+				000000000000000000000013 /* Shared */,
 				000000000000000000000020 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -62,6 +107,7 @@
 			children = (
 				000000000000000000000120 /* LifeGridAss3.app */,
 				000000000000000000000121 /* LifeGridAss3Tests.xctest */,
+				000000000000000000000122 /* LifeGridWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,11 +122,16 @@
 				000000000000000120000000 /* Sources */,
 				000000000000000130000000 /* Frameworks */,
 				000000000000000140000000 /* Resources */,
+				000000000000000140000003 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
+			dependencies = (
+				000000000000000150000004 /* PBXTargetDependency */,
+			);
 			fileSystemSynchronizedGroups = (
 				000000000000000000000010 /* LifeGridAss3 */,
+				000000000000000000000013 /* Shared */,
 			);
 			name = LifeGridAss3;
 			productName = MyApp;
@@ -108,6 +159,27 @@
 			productReference = 000000000000000000000121 /* LifeGridAss3Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		000000000000000100000002 /* LifeGridWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000110000002 /* Build configuration list for PBXNativeTarget "LifeGridWidget" */;
+			buildPhases = (
+				000000000000000120000002 /* Sources */,
+				000000000000000130000002 /* Frameworks */,
+				000000000000000140000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				000000000000000000000012 /* LifeGridWidget */,
+				000000000000000000000013 /* Shared */,
+			);
+			name = LifeGridWidget;
+			productName = LifeGridWidget;
+			productReference = 000000000000000000000122 /* LifeGridWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -121,6 +193,9 @@
 					000000000000000100000000 = {
 						CreatedOnToolsVersion = 26.3;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};
@@ -129,6 +204,14 @@
 					000000000000000100000001 = {
 						CreatedOnToolsVersion = 27.0;
 						TestTargetID = 000000000000000100000000;
+					};
+					000000000000000100000002 = {
+						CreatedOnToolsVersion = 27.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -148,6 +231,7 @@
 			targets = (
 				000000000000000100000000 /* LifeGridAss3 */,
 				000000000000000100000001 /* LifeGridAss3Tests */,
+				000000000000000100000002 /* LifeGridWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -163,6 +247,13 @@
 			files = (
 			);
 		};
+		000000000000000140000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -176,6 +267,13 @@
 			files = (
 			);
 		};
+		000000000000000120000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -183,6 +281,11 @@
 			isa = PBXTargetDependency;
 			target = 000000000000000100000000 /* LifeGridAss3 */;
 			targetProxy = 000000000000000150000001 /* PBXContainerItemProxy */;
+		};
+		000000000000000150000004 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000100000002 /* LifeGridWidget */;
+			targetProxy = 000000000000000150000003 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -447,6 +550,66 @@
 			};
 			name = Release;
 		};
+		000000000000000111000002 /* Debug configuration for PBXNativeTarget "LifeGridWidget" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = LifeGridWidget/LifeGridWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LUP7G5CP9J;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LifeGridWidget-Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LALAJJ0302.com.LifeGridAss3.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		000000000000000112000002 /* Release configuration for PBXNativeTarget "LifeGridWidget" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = LifeGridWidget/LifeGridWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LUP7G5CP9J;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LifeGridWidget-Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LALAJJ0302.com.LifeGridAss3.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -472,6 +635,15 @@
 				000000000000000111000001 /* Debug configuration for PBXNativeTarget "LifeGridAss3Tests" */,
 				000000000000000112000001 /* Release configuration for PBXNativeTarget "LifeGridAss3Tests" */,
 			);
+			defaultConfigurationName = Release;
+		};
+		000000000000000110000002 /* Build configuration list for PBXNativeTarget "LifeGridWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000111000002 /* Debug configuration for PBXNativeTarget "LifeGridWidget" */,
+				000000000000000112000002 /* Release configuration for PBXNativeTarget "LifeGridWidget" */,
+			);
+			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

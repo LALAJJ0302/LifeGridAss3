@@ -16,7 +16,7 @@ extension PublishTreeHolePostError: LocalizedError {
         case .emptyPost:
             "Write something before publishing."
         case .postTooLong(let maximumCharacters):
-            "Public posts must be (maximumCharacters) characters or fewer."
+            "Public posts must be \(maximumCharacters) characters or fewer."
         case .unsafePublicContent:
             "This reflection cannot be shared publicly because it may contain sexual or violent content."
         case .couldNotPublish:

@@ -14,7 +14,20 @@ Assignment 2 supplied the basic application idea. This project is a new Xcode pr
 - anonymous supportive replies;
 - sexual/violent-content checks at the public-sharing use-case boundary;
 - loading, empty, failure, retry, character-limit, and offline states;
-- in-memory preview repositories and 34 unit tests.
+- in-memory preview repositories and 35 unit tests.
+
+## System extensions
+
+### LifeGrid Widget
+
+The Widget gives someone a private, glanceable check-in without requiring them to open the app. It deliberately shows only the current life week, remaining weeks in the chosen frame, and whether a reflection has been recorded this week. Reflection text is never copied to the Widget container or displayed on the Lock Screen.
+
+- Home Screen: `systemSmall`
+- Lock Screen: `accessoryRectangular`
+- App Group: `group.LALAJJ0302.com.LifeGridAss3`
+- Shared value: `LifeGridWidgetSnapshot`
+
+The main app writes the snapshot after loading or saving the current week's reflections and then calls `WidgetCenter.shared.reloadTimelines(ofKind:)`. The Widget also requests a new timeline shortly after midnight so the life-week calculation stays current.
 
 ## Privacy boundary
 
@@ -79,6 +92,6 @@ Verified in Xcode on 1 October 2026:
 
 - app build succeeded;
 - interactive SwiftUI preview rendered;
-- **34 tests in 11 suites passed**.
+- **35 tests passed**, including App Group Widget snapshot persistence.
 
 See `DEBUGGING.md` for common Xcode, simulator, preview, and CloudKit troubleshooting steps.
