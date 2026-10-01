@@ -4,14 +4,15 @@ import Foundation
 /// CloudKit as the synchronization destination.
 actor OfflineFirstUserProfileRepository: UserProfileSyncRepository {
     private let local: any UserProfileRepository
-    private let remote: any UserProfileRepository
+    private let makeRemote: @Sendable () -> any UserProfileRepository
+    private var cachedRemote: (any UserProfileRepository)?
 
     init(
         local: any UserProfileRepository,
-        remote: any UserProfileRepository
+        remote: @autoclosure @escaping @Sendable () -> any UserProfileRepository
     ) {
         self.local = local
-        self.remote = remote
+        makeRemote = remote
     }
 
     func save(_ profile: UserProfile) async throws {
@@ -19,7 +20,7 @@ actor OfflineFirstUserProfileRepository: UserProfileSyncRepository {
         // is durable. Cloud synchronization must never block onboarding.
         try await local.save(profile)
 
-        let remote = remote
+        let remote = remoteRepository()
         Task {
             try? await remote.save(profile)
         }
@@ -30,6 +31,8 @@ actor OfflineFirstUserProfileRepository: UserProfileSyncRepository {
     }
 
     func synchronize() async -> UserProfile? {
+        let remote = remoteRepository()
+
         do {
             if let localProfile = try await local.currentProfile() {
                 try await remote.save(localProfile)
@@ -45,5 +48,15 @@ actor OfflineFirstUserProfileRepository: UserProfileSyncRepository {
         } catch {
             return try? await local.currentProfile()
         }
+    }
+
+    private func remoteRepository() -> any UserProfileRepository {
+        if let cachedRemote {
+            return cachedRemote
+        }
+
+        let remote = makeRemote()
+        cachedRemote = remote
+        return remote
     }
 }
