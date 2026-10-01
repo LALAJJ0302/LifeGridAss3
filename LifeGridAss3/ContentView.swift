@@ -5,15 +5,18 @@ struct ContentView: View {
     private let profileRepository: any UserProfileSyncRepository
     private let lifeEntryRepository: any LifeEntrySyncRepository
     private let treeHolePostRepository: any TreeHolePostRepository
+    private let supportReplyRepository: any SupportReplyRepository
 
     init(
         profileRepository: any UserProfileSyncRepository,
         lifeEntryRepository: any LifeEntrySyncRepository,
-        treeHolePostRepository: any TreeHolePostRepository
+        treeHolePostRepository: any TreeHolePostRepository,
+        supportReplyRepository: any SupportReplyRepository
     ) {
         self.profileRepository = profileRepository
         self.lifeEntryRepository = lifeEntryRepository
         self.treeHolePostRepository = treeHolePostRepository
+        self.supportReplyRepository = supportReplyRepository
         _viewModel = StateObject(
             wrappedValue: AppViewModel(profileRepository: profileRepository)
         )
@@ -55,7 +58,8 @@ struct ContentView: View {
                     TreeHoleFeedView(
                         loadPosts: LoadTreeHoleFeedUseCase(
                             repository: treeHolePostRepository
-                        )
+                        ),
+                        supportReplyRepository: supportReplyRepository
                     )
                     .tabItem {
                         Label("Tree Hole", systemImage: "bubble.left.and.bubble.right.fill")

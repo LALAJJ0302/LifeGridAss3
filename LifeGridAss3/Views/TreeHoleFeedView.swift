@@ -2,8 +2,13 @@ import SwiftUI
 
 struct TreeHoleFeedView: View {
     @StateObject private var viewModel: TreeHoleFeedViewModel
+    private let supportReplyRepository: any SupportReplyRepository
 
-    init(loadPosts: LoadTreeHoleFeedUseCase) {
+    init(
+        loadPosts: LoadTreeHoleFeedUseCase,
+        supportReplyRepository: any SupportReplyRepository
+    ) {
+        self.supportReplyRepository = supportReplyRepository
         _viewModel = StateObject(
             wrappedValue: TreeHoleFeedViewModel(loadPosts: loadPosts)
         )
@@ -101,6 +106,23 @@ struct TreeHoleFeedView: View {
             Label("Shared anonymously", systemImage: "eye.slash")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+
+            NavigationLink {
+                SupportRepliesView(
+                    post: post,
+                    loadReplies: LoadSupportRepliesUseCase(
+                        repository: supportReplyRepository
+                    ),
+                    sendReply: SendSupportReplyUseCase(
+                        repository: supportReplyRepository,
+                        safetyChecker: RuleBasedContentSafetyChecker()
+                    )
+                )
+            } label: {
+                Label("View and send support", systemImage: "heart.bubble")
+                    .font(.caption.weight(.semibold))
+            }
+            .buttonStyle(.bordered)
         }
         .padding(18)
         .background(.background, in: RoundedRectangle(cornerRadius: 18))
