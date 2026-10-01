@@ -3,15 +3,19 @@ import SwiftUI
 struct LifeGridHomeView: View {
     let profile: UserProfile
     let recordLifeEntry: RecordLifeEntryUseCase
+    let publishTreeHolePost: PublishTreeHolePostUseCase
     @StateObject private var entriesViewModel: CurrentWeekEntriesViewModel
+    @State private var entryForSharing: LifeEntry?
 
     init(
         profile: UserProfile,
         recordLifeEntry: RecordLifeEntryUseCase,
-        loadLifeEntries: LoadLifeEntriesForWeekUseCase
+        loadLifeEntries: LoadLifeEntriesForWeekUseCase,
+        publishTreeHolePost: PublishTreeHolePostUseCase
     ) {
         self.profile = profile
         self.recordLifeEntry = recordLifeEntry
+        self.publishTreeHolePost = publishTreeHolePost
         _entriesViewModel = StateObject(
             wrappedValue: CurrentWeekEntriesViewModel(
                 loadEntries: loadLifeEntries
@@ -62,6 +66,12 @@ struct LifeGridHomeView: View {
         }
         .task(id: currentWeek) {
             await entriesViewModel.load(lifeWeekNumber: currentWeek)
+        }
+        .sheet(item: $entryForSharing) { entry in
+            TreeHoleDraftView(
+                sourceEntry: entry,
+                publishPost: publishTreeHolePost
+            )
         }
     }
 
@@ -119,9 +129,19 @@ struct LifeGridHomeView: View {
             Text(entry.message)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            Label("Private", systemImage: "lock.fill")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+            HStack {
+                Label("Private", systemImage: "lock.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                Button("Share edited copy") {
+                    entryForSharing = entry
+                }
+                .font(.caption.weight(.semibold))
+                .buttonStyle(.bordered)
+            }
         }
         .padding(18)
         .background(.background, in: RoundedRectangle(cornerRadius: 18))

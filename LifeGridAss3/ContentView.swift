@@ -4,13 +4,16 @@ struct ContentView: View {
     @StateObject private var viewModel: AppViewModel
     private let profileRepository: any UserProfileSyncRepository
     private let lifeEntryRepository: any LifeEntrySyncRepository
+    private let treeHolePostRepository: any TreeHolePostRepository
 
     init(
         profileRepository: any UserProfileSyncRepository,
-        lifeEntryRepository: any LifeEntrySyncRepository
+        lifeEntryRepository: any LifeEntrySyncRepository,
+        treeHolePostRepository: any TreeHolePostRepository
     ) {
         self.profileRepository = profileRepository
         self.lifeEntryRepository = lifeEntryRepository
+        self.treeHolePostRepository = treeHolePostRepository
         _viewModel = StateObject(
             wrappedValue: AppViewModel(profileRepository: profileRepository)
         )
@@ -38,6 +41,10 @@ struct ContentView: View {
                     ),
                     loadLifeEntries: LoadLifeEntriesForWeekUseCase(
                         repository: lifeEntryRepository
+                    ),
+                    publishTreeHolePost: PublishTreeHolePostUseCase(
+                        repository: treeHolePostRepository,
+                        safetyChecker: RuleBasedContentSafetyChecker()
                     )
                 )
 

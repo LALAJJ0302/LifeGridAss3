@@ -9,12 +9,14 @@ import SwiftUI
         local: FileLifeEntryRepository(),
         remote: CloudKitLifeEntryRepository()
     )
+    private let treeHolePostRepository = CloudKitTreeHolePostRepository()
 
     var body: some Scene {
         WindowGroup {
             ContentView(
                 profileRepository: profileRepository,
-                lifeEntryRepository: lifeEntryRepository
+                lifeEntryRepository: lifeEntryRepository,
+                treeHolePostRepository: treeHolePostRepository
             )
         }
     }
