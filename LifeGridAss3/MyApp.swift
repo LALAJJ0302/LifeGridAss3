@@ -1,6 +1,6 @@
 import SwiftUI
 
-@main struct MyApp: App {
+@main struct LifeGridAss3App: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
