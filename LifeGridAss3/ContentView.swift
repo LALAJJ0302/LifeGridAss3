@@ -3,9 +3,14 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var viewModel: AppViewModel
     private let profileRepository: any UserProfileSyncRepository
+    private let lifeEntryRepository: any LifeEntrySyncRepository
 
-    init(profileRepository: any UserProfileSyncRepository) {
+    init(
+        profileRepository: any UserProfileSyncRepository,
+        lifeEntryRepository: any LifeEntrySyncRepository
+    ) {
         self.profileRepository = profileRepository
+        self.lifeEntryRepository = lifeEntryRepository
         _viewModel = StateObject(
             wrappedValue: AppViewModel(profileRepository: profileRepository)
         )
@@ -26,7 +31,12 @@ struct ContentView: View {
                 )
 
             case .ready(let profile):
-                LifeGridHomeView(profile: profile)
+                LifeGridHomeView(
+                    profile: profile,
+                    recordLifeEntry: RecordLifeEntryUseCase(
+                        repository: lifeEntryRepository
+                    )
+                )
 
             case .failed(let message):
                 ContentUnavailableView {

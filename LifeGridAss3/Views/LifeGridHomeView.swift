@@ -2,6 +2,7 @@ import SwiftUI
 
 struct LifeGridHomeView: View {
     let profile: UserProfile
+    let recordLifeEntry: RecordLifeEntryUseCase
 
     private var currentWeek: Int {
         profile.weeksLived()
@@ -31,17 +32,10 @@ struct LifeGridHomeView: View {
                         )
                     }
 
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("This week")
-                            .font(.title2.bold())
-                        Text("Your reflection editor will live here next.")
-                            .foregroundStyle(.secondary)
-                        Label("Private by default", systemImage: "lock.shield.fill")
-                            .foregroundStyle(.indigo)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(22)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 22))
+                    PrivateReflectionEditorView(
+                        recordLifeEntry: recordLifeEntry,
+                        lifeWeekNumber: currentWeek
+                    )
                 }
                 .padding(20)
             }

@@ -5,10 +5,17 @@ import SwiftUI
         local: FileUserProfileRepository(),
         remote: CloudKitUserProfileRepository()
     )
+    private let lifeEntryRepository = OfflineFirstLifeEntryRepository(
+        local: FileLifeEntryRepository(),
+        remote: CloudKitLifeEntryRepository()
+    )
 
     var body: some Scene {
         WindowGroup {
-            ContentView(profileRepository: profileRepository)
+            ContentView(
+                profileRepository: profileRepository,
+                lifeEntryRepository: lifeEntryRepository
+            )
         }
     }
 }
