@@ -8,7 +8,7 @@ actor CloudKitSupportReplyRepository: SupportReplyRepository {
         static let recordType = "SupportReply"
 
         enum Field {
-            static let postID = "postID"
+            static let postReference = "postReference"
             static let message = "message"
             static let createdAt = "createdAt"
         }
@@ -29,7 +29,10 @@ actor CloudKitSupportReplyRepository: SupportReplyRepository {
             recordType: Schema.recordType,
             recordID: CKRecord.ID(recordName: reply.id.uuidString)
         )
-        record[Schema.Field.postID] = reply.postID.uuidString
+        record[Schema.Field.postReference] = CKRecord.Reference(
+            recordID: treeHolePostRecordID(for: reply.postID),
+            action: .none
+        )
         record[Schema.Field.message] = reply.message
         record[Schema.Field.createdAt] = reply.createdAt
         _ = try await database.save(record)
@@ -40,8 +43,11 @@ actor CloudKitSupportReplyRepository: SupportReplyRepository {
             recordType: Schema.recordType,
             predicate: NSPredicate(
                 format: "%K == %@",
-                Schema.Field.postID,
-                postID.uuidString
+                Schema.Field.postReference,
+                CKRecord.Reference(
+                    recordID: treeHolePostRecordID(for: postID),
+                    action: .none
+                )
             )
         )
         query.sortDescriptors = [
@@ -61,8 +67,8 @@ actor CloudKitSupportReplyRepository: SupportReplyRepository {
     private func makeReply(from record: CKRecord) throws -> SupportReply {
         guard
             let id = UUID(uuidString: record.recordID.recordName),
-            let postIDValue = record[Schema.Field.postID] as? String,
-            let postID = UUID(uuidString: postIDValue),
+            let postReference = record[Schema.Field.postReference] as? CKRecord.Reference,
+            let postID = UUID(uuidString: postReference.recordID.recordName),
             let message = record[Schema.Field.message] as? String,
             let createdAt = record[Schema.Field.createdAt] as? Date
         else {
@@ -75,6 +81,12 @@ actor CloudKitSupportReplyRepository: SupportReplyRepository {
             message: message,
             createdAt: createdAt
         )
+    }
+
+    private func treeHolePostRecordID(
+        for postID: TreeHolePost.ID
+    ) -> CKRecord.ID {
+        CKRecord.ID(recordName: postID.uuidString)
     }
 }
 

@@ -57,7 +57,7 @@ Explicit user action: "Share edited copy"
 SupportReply
   -> safety check
   -> CloudKit public database
-  -> references only the public TreeHolePost ID
+  -> references the public TreeHolePost through CKRecord.Reference
 
 Text or URL from another app
   -> Share Extension
@@ -101,7 +101,7 @@ For community queries in CloudKit Dashboard, configure these development-schema 
 
 - `TreeHolePost.createdAt`: queryable and sortable;
 - `TreeHolePost.emotionalState`: queryable;
-- `SupportReply.postID`: queryable;
+- `SupportReply.postReference`: queryable;
 - `SupportReply.createdAt`: sortable.
 
 Private profile and reflection records use the private database. `TreeHolePost` and `SupportReply` use the public database.
