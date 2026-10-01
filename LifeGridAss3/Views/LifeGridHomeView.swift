@@ -1,0 +1,70 @@
+import SwiftUI
+
+struct LifeGridHomeView: View {
+    let profile: UserProfile
+
+    private var currentWeek: Int {
+        profile.weeksLived()
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Week \(currentWeek.formatted())")
+                            .font(.largeTitle.bold())
+                        Text("One week at a time. Your private reflections belong to you.")
+                            .foregroundStyle(.secondary)
+                    }
+
+                    HStack(spacing: 14) {
+                        metricCard(
+                            value: currentWeek.formatted(),
+                            label: "weeks lived",
+                            color: .indigo
+                        )
+                        metricCard(
+                            value: profile.remainingWeeks().formatted(),
+                            label: "weeks in frame",
+                            color: .teal
+                        )
+                    }
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("This week")
+                            .font(.title2.bold())
+                        Text("Your reflection editor will live here next.")
+                            .foregroundStyle(.secondary)
+                        Label("Private by default", systemImage: "lock.shield.fill")
+                            .foregroundStyle(.indigo)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(22)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 22))
+                }
+                .padding(20)
+            }
+            .background(Color.indigo.opacity(0.05))
+            .navigationTitle("LifeGrid")
+        }
+    }
+
+    private func metricCard(
+        value: String,
+        label: String,
+        color: Color
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(value)
+                .font(.title2.bold())
+                .foregroundStyle(color)
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(18)
+        .background(.background, in: RoundedRectangle(cornerRadius: 18))
+    }
+}
