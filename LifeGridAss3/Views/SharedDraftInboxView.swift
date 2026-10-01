@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SharedDraftInboxView: View {
+    @Environment(\.scenePhase) private var scenePhase
+
     let profile: UserProfile
     let recordLifeEntry: RecordLifeEntryUseCase
     let draftRepository: any SharedReflectionDraftRepository
@@ -73,6 +75,13 @@ struct SharedDraftInboxView: View {
             .refreshable { await viewModel.load() }
         }
         .task { await viewModel.load() }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else { return }
+
+            Task {
+                await viewModel.load()
+            }
+        }
         .alert(
             "Drafts unavailable",
             isPresented: Binding(
