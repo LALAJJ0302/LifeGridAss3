@@ -41,7 +41,7 @@ final class SupportRepliesViewModel: ObservableObject {
         do {
             replies = try await loadReplies.execute(for: postID)
         } catch {
-            errorMessage = "Replies could not be loaded. Check your connection and try again."
+            errorMessage = "Replies could not be loaded from this device. Try again."
         }
     }
 

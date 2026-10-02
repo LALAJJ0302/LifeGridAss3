@@ -11,10 +11,10 @@ final class AppViewModel: ObservableObject {
     }
 
     @Published private(set) var phase: Phase = .loading
-    private let profileRepository: any UserProfileSyncRepository
+    private let profileRepository: any UserProfileRepository
     private var hasLoaded = false
 
-    init(profileRepository: any UserProfileSyncRepository) {
+    init(profileRepository: any UserProfileRepository) {
         self.profileRepository = profileRepository
     }
 
@@ -27,10 +27,6 @@ final class AppViewModel: ObservableObject {
                 phase = .ready(profile)
             } else {
                 phase = .profileSetup
-            }
-
-            Task { [weak self] in
-                await self?.synchronizeProfile()
             }
         } catch {
             phase = .failed(
@@ -47,11 +43,5 @@ final class AppViewModel: ObservableObject {
         hasLoaded = false
         phase = .loading
         await loadProfileIfNeeded()
-    }
-
-    private func synchronizeProfile() async {
-        if let synchronizedProfile = await profileRepository.synchronize() {
-            phase = .ready(synchronizedProfile)
-        }
     }
 }

@@ -1,25 +1,24 @@
 import SwiftUI
 
 @main struct LifeGridAss3App: App {
-    private let profileRepository = OfflineFirstUserProfileRepository(
-        local: FileUserProfileRepository(),
-        remote: CloudKitUserProfileRepository()
-    )
-    private let lifeEntryRepository = OfflineFirstLifeEntryRepository(
-        local: FileLifeEntryRepository(),
-        remote: CloudKitLifeEntryRepository()
-    )
-    private let treeHolePostRepository = CloudKitTreeHolePostRepository()
-    private let supportReplyRepository = CloudKitSupportReplyRepository()
+    private let repository: SwiftDataLifeGridRepository
     private let sharedDraftRepository = AppGroupSharedReflectionDraftRepository()
+
+    init() {
+        do {
+            repository = try SwiftDataLifeGridRepository()
+        } catch {
+            fatalError("LifeGrid could not open its local database: \(error)")
+        }
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView(
-                profileRepository: profileRepository,
-                lifeEntryRepository: lifeEntryRepository,
-                treeHolePostRepository: treeHolePostRepository,
-                supportReplyRepository: supportReplyRepository,
+                profileRepository: repository,
+                lifeEntryRepository: repository,
+                treeHolePostRepository: repository,
+                supportReplyRepository: repository,
                 sharedDraftRepository: sharedDraftRepository
             )
         }

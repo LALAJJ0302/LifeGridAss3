@@ -15,7 +15,7 @@ enum SendSupportReplyError: Error, Equatable, LocalizedError {
         case .unsafePublicContent:
             "This reply cannot be shared because it may contain sexual or violent content."
         case .couldNotSend:
-            "Your reply could not be sent. Check your connection and try again."
+            "Your reply could not be saved on this device. Try again."
         }
     }
 }

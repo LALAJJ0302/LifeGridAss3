@@ -29,7 +29,7 @@ extension PublishTreeHolePostError: LocalizedError {
         case .unsafePublicContent:
             "It is still saved privately. Edit the public copy or keep it only in your LifeGrid."
         case .couldNotPublish:
-            "Check your connection and try again."
+            "LifeGrid could not save the post on this device. Try again."
         default:
             nil
         }

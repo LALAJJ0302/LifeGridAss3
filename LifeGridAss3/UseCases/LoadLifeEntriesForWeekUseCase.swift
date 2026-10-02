@@ -1,16 +1,15 @@
 import Foundation
 
-/// Loads one LifeGrid week and reconciles its protected local reflections
-/// with the user's private CloudKit database when the network is available.
+/// Loads the private reflections saved for one LifeGrid week.
 struct LoadLifeEntriesForWeekUseCase {
-    private let repository: any LifeEntrySyncRepository
+    private let repository: any LifeEntryRepository
 
-    init(repository: any LifeEntrySyncRepository) {
+    init(repository: any LifeEntryRepository) {
         self.repository = repository
     }
 
     func execute(lifeWeekNumber: Int) async -> [LifeEntry] {
         guard lifeWeekNumber >= 0 else { return [] }
-        return await repository.synchronize(forLifeWeek: lifeWeekNumber)
+        return (try? await repository.entries(forLifeWeek: lifeWeekNumber)) ?? []
     }
 }

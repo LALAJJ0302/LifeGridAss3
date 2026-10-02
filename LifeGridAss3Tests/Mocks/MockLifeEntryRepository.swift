@@ -1,7 +1,7 @@
 import Foundation
 @testable import LifeGridAss3
 
-actor MockLifeEntryRepository: LifeEntrySyncRepository {
+actor MockLifeEntryRepository: LifeEntryRepository {
     enum MockFailure: Error {
         case forcedSaveFailure
     }
@@ -35,10 +35,6 @@ actor MockLifeEntryRepository: LifeEntrySyncRepository {
 
     func entries(forLifeWeek week: Int) -> [LifeEntry] {
         storedEntries.filter { $0.lifeWeekNumber == week }
-    }
-
-    func synchronize(forLifeWeek week: Int) -> [LifeEntry] {
-        entries(forLifeWeek: week)
     }
 
     func forceSaveFailure() {

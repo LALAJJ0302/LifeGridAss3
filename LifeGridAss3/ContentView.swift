@@ -2,15 +2,15 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel: AppViewModel
-    private let profileRepository: any UserProfileSyncRepository
-    private let lifeEntryRepository: any LifeEntrySyncRepository
+    private let profileRepository: any UserProfileRepository
+    private let lifeEntryRepository: any LifeEntryRepository
     private let treeHolePostRepository: any TreeHolePostRepository
     private let supportReplyRepository: any SupportReplyRepository
     private let sharedDraftRepository: any SharedReflectionDraftRepository
 
     init(
-        profileRepository: any UserProfileSyncRepository,
-        lifeEntryRepository: any LifeEntrySyncRepository,
+        profileRepository: any UserProfileRepository,
+        lifeEntryRepository: any LifeEntryRepository,
         treeHolePostRepository: any TreeHolePostRepository,
         supportReplyRepository: any SupportReplyRepository,
         sharedDraftRepository: any SharedReflectionDraftRepository
@@ -82,7 +82,7 @@ struct ContentView: View {
 
             case .failed(let message):
                 ContentUnavailableView {
-                    Label("LifeGrid unavailable", systemImage: "icloud.slash")
+                    Label("LifeGrid unavailable", systemImage: "externaldrive.badge.exclamationmark")
                 } description: {
                     Text(message)
                 } actions: {

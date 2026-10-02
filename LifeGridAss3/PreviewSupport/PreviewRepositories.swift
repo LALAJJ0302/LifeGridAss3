@@ -1,9 +1,9 @@
 #if DEBUG
 import Foundation
 
-/// In-memory storage for SwiftUI previews. It never touches protected files
-/// or CloudKit, so preview interactions are safe and repeatable.
-actor PreviewLifeEntryRepository: LifeEntrySyncRepository {
+/// In-memory storage for SwiftUI previews. It never touches saved app data,
+/// so preview interactions are safe and repeatable.
+actor PreviewLifeEntryRepository: LifeEntryRepository {
     private var storedEntries: [LifeEntry]
 
     init(entries: [LifeEntry] = []) {
@@ -27,9 +27,6 @@ actor PreviewLifeEntryRepository: LifeEntrySyncRepository {
         storedEntries.filter { $0.lifeWeekNumber == week }
     }
 
-    func synchronize(forLifeWeek week: Int) -> [LifeEntry] {
-        entries(forLifeWeek: week)
-    }
 }
 
 /// In-memory public-post storage used only by interactive previews.

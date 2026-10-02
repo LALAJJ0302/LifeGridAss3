@@ -23,7 +23,7 @@ final class TreeHoleFeedViewModel: ObservableObject {
             posts = try await loadPosts.execute(matching: selectedEmotion)
         } catch {
             posts = []
-            errorMessage = "The community feed is unavailable. Check your connection and try again."
+            errorMessage = "The local Tree Hole could not be loaded. Try again."
         }
     }
 }

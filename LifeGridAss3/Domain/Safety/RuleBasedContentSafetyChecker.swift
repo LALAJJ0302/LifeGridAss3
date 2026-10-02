@@ -1,6 +1,6 @@
 import Foundation
 
-/// An offline-first safety baseline for the assignment prototype.
+/// A small on-device safety baseline for the assignment prototype.
 ///
 /// Exact word matching avoids substring mistakes such as finding "sex" in
 /// an unrelated longer word. A production community should supplement this

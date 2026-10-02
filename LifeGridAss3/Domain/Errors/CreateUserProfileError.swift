@@ -23,7 +23,7 @@ enum CreateUserProfileError: Error, Equatable, LocalizedError {
         case .invalidLifespanFrame:
             "Adjust the lifespan frame and try again."
         case .couldNotSave:
-            "Check your iCloud connection and try again."
+            "LifeGrid could not open its local data. Try again."
         }
     }
 }

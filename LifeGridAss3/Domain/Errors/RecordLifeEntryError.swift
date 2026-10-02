@@ -20,7 +20,7 @@ enum RecordLifeEntryError: Error, Equatable, LocalizedError {
         case .invalidLifeWeek:
             "LifeGrid could not place this reflection in your timeline."
         case .couldNotSave:
-            "LifeGrid could not save this reflection because the storage service is unavailable."
+            "LifeGrid could not save this reflection on this device."
         }
     }
 
@@ -35,7 +35,7 @@ enum RecordLifeEntryError: Error, Equatable, LocalizedError {
         case .invalidLifeWeek:
             "Check your birth date in your LifeGrid profile and try again."
         case .couldNotSave:
-            "Your writing is still on this screen. Check your connection and try again."
+            "Your writing is still on this screen. Try saving it again."
         }
     }
 }
