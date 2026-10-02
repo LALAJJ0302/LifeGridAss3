@@ -83,3 +83,25 @@ struct DraftInboxAnimation: View {
         }
     }
 }
+
+struct PublicShareAnimation: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        ZStack {
+            if reduceMotion {
+                LottieView(animation: .named("support_pulse"))
+                    .currentProgress(1)
+                    .resizable()
+            } else {
+                LottieView(animation: .named("support_pulse"))
+                    .looping()
+                    .resizable()
+            }
+
+            Image(systemName: "eye.slash.fill")
+                .font(.system(size: 23, weight: .semibold))
+                .foregroundStyle(.white)
+        }
+    }
+}
