@@ -60,3 +60,26 @@ struct SupportPulseAnimation: View {
         }
     }
 }
+
+struct DraftInboxAnimation: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        ZStack {
+            if reduceMotion {
+                LottieView(animation: .named("draft_flow"))
+                    .currentProgress(0.5)
+                    .resizable()
+            } else {
+                LottieView(animation: .named("draft_flow"))
+                    .looping()
+                    .resizable()
+            }
+
+            Image(systemName: "tray.full.fill")
+                .font(.system(size: 34, weight: .semibold))
+                .foregroundStyle(.white)
+                .offset(y: 38)
+        }
+    }
+}
