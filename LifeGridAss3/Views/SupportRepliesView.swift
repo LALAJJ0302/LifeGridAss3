@@ -37,7 +37,7 @@ struct SupportRepliesView: View {
                 } else if viewModel.replies.isEmpty {
                     ContentUnavailableView(
                         "No replies yet",
-                        systemImage: "heart.bubble",
+                        systemImage: "heart.fill",
                         description: Text("Be the first person to respond with care.")
                     )
                 } else {

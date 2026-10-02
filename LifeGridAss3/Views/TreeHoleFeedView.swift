@@ -119,7 +119,7 @@ struct TreeHoleFeedView: View {
                     )
                 )
             } label: {
-                Label("View and send support", systemImage: "heart.bubble")
+                Label("View and send support", systemImage: "heart.fill")
                     .font(.caption.weight(.semibold))
             }
             .buttonStyle(.bordered)

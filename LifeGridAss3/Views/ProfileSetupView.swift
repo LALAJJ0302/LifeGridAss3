@@ -30,6 +30,7 @@ struct ProfileSetupView: View {
             ScrollView {
                 VStack(spacing: 28) {
                     header
+                    growthCard
                     lifeGridPreview
                     profileForm
                 }
@@ -48,6 +49,24 @@ struct ProfileSetupView: View {
         } message: {
             Text(viewModel.errorMessage ?? "")
         }
+    }
+
+    private var growthCard: some View {
+        HStack(spacing: 16) {
+            GrowingPlantAnimation()
+                .frame(width: 120, height: 120)
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Grow one week at a time")
+                    .font(.headline)
+                Text("Small reflections can become meaningful patterns over time.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(18)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24))
     }
 
     private var header: some View {

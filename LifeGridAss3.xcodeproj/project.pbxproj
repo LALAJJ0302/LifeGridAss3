@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		000000000000000160000000 /* LifeGridWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 000000000000000000000122 /* LifeGridWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		000000000000000160000001 /* LifeGridShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 000000000000000000000123 /* LifeGridShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		28F1091C306F69FE0043D271 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 28F1091B306F69FE0043D271 /* Lottie */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		000000000000000130000000 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				28F1091C306F69FE0043D271 /* Lottie in Frameworks */,
 			);
 		};
 		000000000000000130000001 /* Frameworks */ = {
@@ -153,6 +155,9 @@
 				000000000000000000000013 /* Shared */,
 			);
 			name = LifeGridAss3;
+			packageProductDependencies = (
+				28F1091B306F69FE0043D271 /* Lottie */,
+			);
 			productName = MyApp;
 			productReference = 000000000000000000000120 /* LifeGridAss3.app */;
 			productType = "com.apple.product-type.application";
@@ -268,6 +273,9 @@
 			);
 			mainGroup = 000000000000000000000001;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				28F1091A306F69FE0043D271 /* XCRemoteSwiftPackageReference "lottie-spm" */,
+			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = 000000000000000000000020 /* Products */;
 			projectDirPath = "";
@@ -770,6 +778,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		28F1091A306F69FE0043D271 /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.6.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		28F1091B306F69FE0043D271 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28F1091A306F69FE0043D271 /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 000000000000000000000000 /* Project object */;
 }

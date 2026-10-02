@@ -93,9 +93,16 @@ struct PrivateReflectionEditorView: View {
             .disabled(!viewModel.canSave)
 
             if let savedMessage = viewModel.savedMessage {
-                Label(savedMessage, systemImage: "checkmark.circle.fill")
-                    .font(.footnote)
-                    .foregroundStyle(.green)
+                HStack(spacing: 10) {
+                    SuccessCheckAnimation()
+                        .frame(width: 44, height: 44)
+                        .accessibilityHidden(true)
+
+                    Text(savedMessage)
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(.green)
+                }
+                .transition(.scale.combined(with: .opacity))
             }
         }
         .padding(22)
