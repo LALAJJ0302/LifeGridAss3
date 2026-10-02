@@ -78,6 +78,17 @@ struct ContentView: View {
                     .tabItem {
                         Label("Shared Drafts", systemImage: "square.and.arrow.down.fill")
                     }
+
+                    ProfileSetupView(
+                        createProfile: CreateUserProfileUseCase(
+                            repository: profileRepository
+                        ),
+                        existingProfile: profile,
+                        onProfileCreated: viewModel.profileCreated
+                    )
+                    .tabItem {
+                        Label("Profile", systemImage: "person.crop.circle.fill")
+                    }
                 }
 
             case .failed(let message):

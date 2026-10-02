@@ -20,6 +20,7 @@ struct CreateUserProfileUseCase {
     func execute(
         birthDate: Date,
         lifespanFrameYears: Int = 80,
+        existingProfile: UserProfile? = nil,
         now: Date = .now
     ) async throws -> UserProfile {
         let birthDay = calendar.startOfDay(for: birthDate)
@@ -34,9 +35,10 @@ struct CreateUserProfileUseCase {
         }
 
         let profile = UserProfile(
+            id: existingProfile?.id ?? UUID(),
             birthDate: birthDay,
             lifespanFrameYears: lifespanFrameYears,
-            createdAt: now
+            createdAt: existingProfile?.createdAt ?? now
         )
 
         do {

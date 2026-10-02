@@ -6,10 +6,14 @@ struct ProfileSetupView: View {
 
     init(
         createProfile: CreateUserProfileUseCase,
+        existingProfile: UserProfile? = nil,
         onProfileCreated: @escaping (UserProfile) -> Void
     ) {
         _viewModel = StateObject(
-            wrappedValue: ProfileSetupViewModel(createProfile: createProfile)
+            wrappedValue: ProfileSetupViewModel(
+                createProfile: createProfile,
+                existingProfile: existingProfile
+            )
         )
         self.onProfileCreated = onProfileCreated
     }
@@ -52,11 +56,15 @@ struct ProfileSetupView: View {
                 .font(.system(size: 42))
                 .foregroundStyle(.indigo)
 
-            Text("Build your LifeGrid")
+            Text(viewModel.isEditing ? "Your Profile" : "Build your LifeGrid")
                 .font(.largeTitle.bold())
                 .multilineTextAlignment(.center)
 
-            Text("Turn time into a gentle visual reminder to notice, reflect, and live intentionally.")
+            Text(
+                viewModel.isEditing
+                    ? "Update the information used to calculate your LifeGrid."
+                    : "Turn time into a gentle visual reminder to notice, reflect, and live intentionally."
+            )
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -93,7 +101,7 @@ struct ProfileSetupView: View {
                 )
                 .datePickerStyle(.compact)
 
-                Label("Stored only in your private iCloud database", systemImage: "lock.fill")
+                Label("Stored only on this device", systemImage: "lock.fill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -120,7 +128,7 @@ struct ProfileSetupView: View {
                         ProgressView()
                             .tint(.white)
                     }
-                    Text(viewModel.isSaving ? "Creating your grid…" : "Create my LifeGrid")
+                    Text(buttonTitle)
                         .fontWeight(.semibold)
                 }
                 .frame(maxWidth: .infinity)
@@ -133,5 +141,12 @@ struct ProfileSetupView: View {
         .padding(22)
         .background(.background, in: RoundedRectangle(cornerRadius: 24))
         .shadow(color: .black.opacity(0.06), radius: 18, y: 8)
+    }
+
+    private var buttonTitle: String {
+        if viewModel.isSaving {
+            return viewModel.isEditing ? "Saving changes…" : "Creating your grid…"
+        }
+        return viewModel.isEditing ? "Save profile changes" : "Create my LifeGrid"
     }
 }

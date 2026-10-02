@@ -9,17 +9,23 @@ final class ProfileSetupViewModel: ObservableObject {
     @Published var errorMessage: String?
 
     private let createProfile: CreateUserProfileUseCase
+    private let existingProfile: UserProfile?
+
+    var isEditing: Bool {
+        existingProfile != nil
+    }
 
     init(
         createProfile: CreateUserProfileUseCase,
+        existingProfile: UserProfile? = nil,
         calendar: Calendar = .current
     ) {
         self.createProfile = createProfile
-        birthDate = calendar.date(
-            byAdding: .year,
-            value: -25,
-            to: .now
-        ) ?? .now
+        self.existingProfile = existingProfile
+        birthDate = existingProfile?.birthDate
+            ?? calendar.date(byAdding: .year, value: -25, to: .now)
+            ?? .now
+        lifespanFrameYears = existingProfile?.lifespanFrameYears ?? 80
     }
 
     func submit() async -> UserProfile? {
@@ -31,7 +37,8 @@ final class ProfileSetupViewModel: ObservableObject {
         do {
             return try await createProfile.execute(
                 birthDate: birthDate,
-                lifespanFrameYears: lifespanFrameYears
+                lifespanFrameYears: lifespanFrameYears,
+                existingProfile: existingProfile
             )
         } catch let error as LocalizedError {
             errorMessage = [error.errorDescription, error.recoverySuggestion]
