@@ -7,7 +7,7 @@ struct RecordLifeEntryUseCaseTests {
 
     @Test("A meaningful private reflection is trimmed and saved")
     func meaningfulReflectionIsSaved() async throws {
-        let repository = MockLifeEntryRepository()
+        let repository = TestRepository()
         let useCase = RecordLifeEntryUseCase(repository: repository)
 
         let entry = try await useCase.execute(
@@ -26,7 +26,7 @@ struct RecordLifeEntryUseCaseTests {
 
     @Test("A private reflection does not require an emotional label")
     func unlabeledReflectionIsSaved() async throws {
-        let repository = MockLifeEntryRepository()
+        let repository = TestRepository()
         let useCase = RecordLifeEntryUseCase(repository: repository)
 
         let entry = try await useCase.execute(
@@ -43,7 +43,7 @@ struct RecordLifeEntryUseCaseTests {
 
     @Test("Whitespace cannot become an empty private reflection")
     func whitespaceOnlyReflectionIsRejected() async {
-        let repository = MockLifeEntryRepository()
+        let repository = TestRepository()
         let useCase = RecordLifeEntryUseCase(repository: repository)
 
         await #expect(throws: RecordLifeEntryError.emptyReflection) {
@@ -61,7 +61,7 @@ struct RecordLifeEntryUseCaseTests {
 
     @Test("A reflection beyond the writing limit is rejected")
     func overlongReflectionIsRejected() async {
-        let repository = MockLifeEntryRepository()
+        let repository = TestRepository()
         let useCase = RecordLifeEntryUseCase(repository: repository)
         let message = String(
             repeating: "a",
@@ -87,7 +87,7 @@ struct RecordLifeEntryUseCaseTests {
 
     @Test("A future moment cannot be added to the LifeGrid")
     func futureMomentIsRejected() async {
-        let repository = MockLifeEntryRepository()
+        let repository = TestRepository()
         let useCase = RecordLifeEntryUseCase(repository: repository)
         let futureMoment = now.addingTimeInterval(60)
 
@@ -106,7 +106,7 @@ struct RecordLifeEntryUseCaseTests {
 
     @Test("A life week cannot be negative")
     func negativeLifeWeekIsRejected() async {
-        let repository = MockLifeEntryRepository()
+        let repository = TestRepository()
         let useCase = RecordLifeEntryUseCase(repository: repository)
 
         await #expect(throws: RecordLifeEntryError.invalidLifeWeek) {
@@ -124,8 +124,8 @@ struct RecordLifeEntryUseCaseTests {
 
     @Test("A storage failure becomes a human-centred save error")
     func storageFailureIsTranslatedForTheUser() async {
-        let repository = MockLifeEntryRepository()
-        await repository.forceSaveFailure()
+        let repository = TestRepository()
+        await repository.forceFailure()
         let useCase = RecordLifeEntryUseCase(repository: repository)
 
         await #expect(throws: RecordLifeEntryError.couldNotSave) {

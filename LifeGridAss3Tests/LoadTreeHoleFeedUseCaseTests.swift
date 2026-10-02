@@ -16,7 +16,7 @@ struct LoadTreeHoleFeedUseCaseTests {
             emotionalState: .hopeful,
             createdAt: now.addingTimeInterval(-100)
         )
-        let repository = MockTreeHolePostRepository(
+        let repository = TestRepository(
             posts: [olderCalm, newerHopeful]
         )
         let useCase = LoadTreeHoleFeedUseCase(repository: repository)

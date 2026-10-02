@@ -7,7 +7,7 @@ struct CreateUserProfileUseCaseTests {
 
     @Test("A valid birth date creates and saves a profile")
     func validProfileIsSaved() async throws {
-        let repository = MockUserProfileRepository()
+        let repository = TestRepository()
         let calendar = Calendar(identifier: .gregorian)
         let useCase = CreateUserProfileUseCase(
             repository: repository,
@@ -32,7 +32,7 @@ struct CreateUserProfileUseCaseTests {
 
     @Test("A future birth date is rejected before saving")
     func futureBirthDateIsRejected() async {
-        let repository = MockUserProfileRepository()
+        let repository = TestRepository()
         let useCase = CreateUserProfileUseCase(repository: repository)
         let tomorrow = now.addingTimeInterval(86_400)
 
@@ -45,7 +45,7 @@ struct CreateUserProfileUseCaseTests {
 
     @Test("An unrealistic lifespan frame is rejected")
     func invalidLifespanFrameIsRejected() async {
-        let repository = MockUserProfileRepository()
+        let repository = TestRepository()
         let useCase = CreateUserProfileUseCase(repository: repository)
 
         await #expect(throws: CreateUserProfileError.invalidLifespanFrame) {
@@ -61,8 +61,8 @@ struct CreateUserProfileUseCaseTests {
 
     @Test("A profile storage failure becomes a user-facing error")
     func storageFailureIsTranslated() async {
-        let repository = MockUserProfileRepository()
-        await repository.forceSaveFailure()
+        let repository = TestRepository()
+        await repository.forceFailure()
         let useCase = CreateUserProfileUseCase(repository: repository)
 
         await #expect(throws: CreateUserProfileError.couldNotSave) {

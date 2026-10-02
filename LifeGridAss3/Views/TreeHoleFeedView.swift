@@ -27,7 +27,7 @@ struct TreeHoleFeedView: View {
                             .padding(.vertical, 40)
                     } else if let errorMessage = viewModel.errorMessage {
                         ContentUnavailableView {
-                            Label("Tree Hole unavailable", systemImage: "wifi.exclamationmark")
+                            Label("Tree Hole unavailable", systemImage: "externaldrive.badge.exclamationmark")
                         } description: {
                             Text(errorMessage)
                         } actions: {

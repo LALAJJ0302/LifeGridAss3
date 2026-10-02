@@ -11,8 +11,8 @@ struct ImportSharedReflectionDraftUseCaseTests {
             suggestedText: "An idea shared from Notes",
             createdAt: now
         )
-        let draftRepository = MockSharedReflectionDraftRepository(drafts: [draft])
-        let lifeEntryRepository = MockLifeEntryRepository()
+        let draftRepository = TestDraftRepository(drafts: [draft])
+        let lifeEntryRepository = TestRepository()
         let useCase = makeUseCase(
             lifeEntryRepository: lifeEntryRepository,
             draftRepository: draftRepository
@@ -35,8 +35,8 @@ struct ImportSharedReflectionDraftUseCaseTests {
     @Test("An empty shared draft cannot become a reflection")
     func emptyDraftIsRejected() async {
         let draft = SharedReflectionDraft(suggestedText: "Original")
-        let draftRepository = MockSharedReflectionDraftRepository(drafts: [draft])
-        let lifeEntryRepository = MockLifeEntryRepository()
+        let draftRepository = TestDraftRepository(drafts: [draft])
+        let lifeEntryRepository = TestRepository()
         let useCase = makeUseCase(
             lifeEntryRepository: lifeEntryRepository,
             draftRepository: draftRepository
@@ -56,8 +56,8 @@ struct ImportSharedReflectionDraftUseCaseTests {
     }
 
     private func makeUseCase(
-        lifeEntryRepository: MockLifeEntryRepository,
-        draftRepository: MockSharedReflectionDraftRepository
+        lifeEntryRepository: TestRepository,
+        draftRepository: TestDraftRepository
     ) -> ImportSharedReflectionDraftUseCase {
         ImportSharedReflectionDraftUseCase(
             recordLifeEntry: RecordLifeEntryUseCase(

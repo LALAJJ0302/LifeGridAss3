@@ -7,7 +7,7 @@ struct PublishTreeHolePostUseCaseTests {
 
     @Test("A safe post is trimmed and published after explicit consent")
     func safePostIsPublished() async throws {
-        let repository = MockTreeHolePostRepository()
+        let repository = TestRepository()
         let useCase = makeUseCase(repository: repository)
 
         let post = try await useCase.execute(
@@ -23,7 +23,7 @@ struct PublishTreeHolePostUseCaseTests {
 
     @Test("Publishing always requires explicit confirmation")
     func consentIsRequired() async {
-        let repository = MockTreeHolePostRepository()
+        let repository = TestRepository()
         let useCase = makeUseCase(repository: repository)
 
         await #expect(throws: PublishTreeHolePostError.consentRequired) {
@@ -40,7 +40,7 @@ struct PublishTreeHolePostUseCaseTests {
 
     @Test("Violent content never reaches the public repository")
     func violentContentIsBlocked() async {
-        let repository = MockTreeHolePostRepository()
+        let repository = TestRepository()
         let useCase = makeUseCase(repository: repository)
 
         await #expect(
@@ -59,7 +59,7 @@ struct PublishTreeHolePostUseCaseTests {
 
     @Test("Sexual content never reaches the public repository")
     func sexualContentIsBlocked() async {
-        let repository = MockTreeHolePostRepository()
+        let repository = TestRepository()
         let useCase = makeUseCase(repository: repository)
 
         await #expect(
@@ -77,7 +77,7 @@ struct PublishTreeHolePostUseCaseTests {
     }
 
     private func makeUseCase(
-        repository: MockTreeHolePostRepository
+        repository: TestRepository
     ) -> PublishTreeHolePostUseCase {
         PublishTreeHolePostUseCase(
             repository: repository,

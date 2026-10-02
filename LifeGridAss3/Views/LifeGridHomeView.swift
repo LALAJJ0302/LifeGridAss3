@@ -199,35 +199,18 @@ struct LifeGridHomeView: View {
         birthDate: .now.addingTimeInterval(-25 * 365 * 24 * 60 * 60),
         lifespanFrameYears: 80
     )
-    let currentWeek = profile.weeksLived()
-    let lifeEntryRepository = PreviewLifeEntryRepository(
-        entries: [
-            LifeEntry(
-                message: "I made time to check in with myself today.",
-                emotionalState: .hopeful,
-                occurredAt: .now.addingTimeInterval(-3_600),
-                lifeWeekNumber: currentWeek
-            ),
-            LifeEntry(
-                message: "A quiet walk helped me feel more grounded.",
-                emotionalState: .calm,
-                occurredAt: .now.addingTimeInterval(-7_200),
-                lifeWeekNumber: currentWeek
-            )
-        ]
-    )
-    let treeHoleRepository = PreviewTreeHolePostRepository()
+    let repository = try! SwiftDataLifeGridRepository(inMemory: true)
 
     LifeGridHomeView(
         profile: profile,
         recordLifeEntry: RecordLifeEntryUseCase(
-            repository: lifeEntryRepository
+            repository: repository
         ),
         loadLifeEntries: LoadLifeEntriesForWeekUseCase(
-            repository: lifeEntryRepository
+            repository: repository
         ),
         publishTreeHolePost: PublishTreeHolePostUseCase(
-            repository: treeHoleRepository,
+            repository: repository,
             safetyChecker: RuleBasedContentSafetyChecker()
         )
     )

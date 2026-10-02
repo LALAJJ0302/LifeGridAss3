@@ -22,7 +22,7 @@ struct LoadSupportRepliesUseCaseTests {
             message: "Different post",
             createdAt: Date(timeIntervalSince1970: 50)
         )
-        let repository = MockSupportReplyRepository(
+        let repository = TestRepository(
             replies: [newer, unrelated, older]
         )
 

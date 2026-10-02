@@ -8,7 +8,7 @@ struct SendSupportReplyUseCaseTests {
 
     @Test("A safe supportive reply is trimmed and stored")
     func safeReplyIsStored() async throws {
-        let repository = MockSupportReplyRepository()
+        let repository = TestRepository()
         let useCase = makeUseCase(repository: repository)
 
         let reply = try await useCase.execute(
@@ -24,7 +24,7 @@ struct SendSupportReplyUseCaseTests {
 
     @Test("Empty replies are rejected")
     func emptyReplyIsRejected() async {
-        let repository = MockSupportReplyRepository()
+        let repository = TestRepository()
         let useCase = makeUseCase(repository: repository)
 
         await #expect(throws: SendSupportReplyError.emptyReply) {
@@ -35,7 +35,7 @@ struct SendSupportReplyUseCaseTests {
 
     @Test("Violent replies never reach public storage")
     func violentReplyIsRejected() async {
-        let repository = MockSupportReplyRepository()
+        let repository = TestRepository()
         let useCase = makeUseCase(repository: repository)
 
         await #expect(
@@ -51,7 +51,7 @@ struct SendSupportReplyUseCaseTests {
 
     @Test("Repository failures become a user-facing send error")
     func storageFailureIsMapped() async {
-        let repository = MockSupportReplyRepository(shouldFail: true)
+        let repository = TestRepository(shouldFail: true)
         let useCase = makeUseCase(repository: repository)
 
         await #expect(throws: SendSupportReplyError.couldNotSend) {
@@ -63,7 +63,7 @@ struct SendSupportReplyUseCaseTests {
     }
 
     private func makeUseCase(
-        repository: MockSupportReplyRepository
+        repository: TestRepository
     ) -> SendSupportReplyUseCase {
         SendSupportReplyUseCase(
             repository: repository,

@@ -11,7 +11,7 @@ struct TreeHoleDraftViewModelTests {
             emotionalState: .hopeful,
             lifeWeekNumber: 1_250
         )
-        let repository = MockTreeHolePostRepository()
+        let repository = TestRepository()
         let viewModel = TreeHoleDraftViewModel(
             sourceEntry: privateEntry,
             publishPost: PublishTreeHolePostUseCase(

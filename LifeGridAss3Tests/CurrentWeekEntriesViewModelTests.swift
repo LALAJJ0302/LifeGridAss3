@@ -22,8 +22,8 @@ struct CurrentWeekEntriesViewModelTests {
             time: 1_799_000_000,
             week: week - 1
         )
-        let repository = MockLifeEntryRepository(
-            storedEntries: [older, differentWeek, newer]
+        let repository = TestRepository(
+            entries: [older, differentWeek, newer]
         )
         let viewModel = CurrentWeekEntriesViewModel(
             loadEntries: LoadLifeEntriesForWeekUseCase(
@@ -40,7 +40,7 @@ struct CurrentWeekEntriesViewModelTests {
     @Test("A newly saved reflection appears without reloading storage")
     @MainActor
     func insertsNewlySavedEntryImmediately() {
-        let repository = MockLifeEntryRepository()
+        let repository = TestRepository()
         let viewModel = CurrentWeekEntriesViewModel(
             loadEntries: LoadLifeEntriesForWeekUseCase(
                 repository: repository
