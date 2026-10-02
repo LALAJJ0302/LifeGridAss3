@@ -82,6 +82,22 @@ The project uses dependency inversion so that UI and business rules do not depen
 
 `MyApp.swift` is the composition root: it creates concrete repositories and injects them into the feature graph. Tests replace them with deterministic in-memory mocks.
 
+## Functional screens and navigation
+
+The three items in the main tab bar are entry points, not the total screen count. LifeGrid provides seven functional screens that follow the stakeholder's workflow:
+
+| Screen | Purpose | How to reach it |
+| --- | --- | --- |
+| Profile Setup | Create the private LifeGrid profile and lifespan frame | First launch when no profile exists |
+| LifeGrid Home | Record and review this week's private reflections | **LifeGrid** tab |
+| Review Public Copy | Edit a separate anonymous copy and confirm public sharing | **Share edited copy** on a private reflection |
+| Tree Hole Feed | Browse recent anonymous posts and filter by emotion | **Tree Hole** tab |
+| Support Replies | Read and send safe, anonymous support | **View and send support** on a Tree Hole post |
+| Shared Drafts Inbox | Review text and links received from other apps | **Shared Drafts** tab |
+| Shared Draft Review | Edit a received draft and explicitly save it privately | Select a draft in the inbox |
+
+`PrivateReflectionEditorView` is a functional component within LifeGrid Home and is not counted as an additional screen.
+
 ## Run locally
 
 1. Open `LifeGridAss3.xcodeproj` in Xcode.
