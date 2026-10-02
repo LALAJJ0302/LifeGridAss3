@@ -50,7 +50,18 @@ struct TreeHoleFeedView: View {
                 }
                 .padding(20)
             }
-            .background(Color.teal.opacity(0.05))
+            .background {
+                LinearGradient(
+                    colors: [
+                        Color.teal.opacity(0.10),
+                        Color.indigo.opacity(0.07),
+                        Color(.systemBackground)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+            }
             .navigationTitle("Tree Hole")
             .refreshable { await viewModel.load() }
         }
@@ -70,7 +81,7 @@ struct TreeHoleFeedView: View {
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.background, in: RoundedRectangle(cornerRadius: 18))
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 22))
     }
 
     private var emotionFilter: some View {
@@ -81,6 +92,10 @@ struct TreeHoleFeedView: View {
             }
         }
         .pickerStyle(.menu)
+        .tint(.teal)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .background(.regularMaterial, in: Capsule())
     }
 
     private func postCard(_ post: TreeHolePost) -> some View {
@@ -122,9 +137,14 @@ struct TreeHoleFeedView: View {
                 Label("View and send support", systemImage: "heart.fill")
                     .font(.caption.weight(.semibold))
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.borderedProminent)
+            .tint(.teal)
         }
         .padding(18)
-        .background(.background, in: RoundedRectangle(cornerRadius: 18))
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 22))
+        .overlay {
+            RoundedRectangle(cornerRadius: 22)
+                .stroke(Color.teal.opacity(0.16))
+        }
     }
 }
