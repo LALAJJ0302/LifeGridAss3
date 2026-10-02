@@ -18,6 +18,13 @@ struct TreeHoleFeedView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 16) {
+                    LifeGridPageHeader(
+                        context: "Anonymous community",
+                        title: "Tree Hole",
+                        subtitle: "Share gently. Listen without judgement.",
+                        symbol: "bubble.left.and.bubble.right.fill",
+                        accent: .teal
+                    )
                     safetyHeader
                     emotionFilter
 
@@ -62,7 +69,6 @@ struct TreeHoleFeedView: View {
                 )
                 .ignoresSafeArea()
             }
-            .navigationTitle("Tree Hole")
             .refreshable { await viewModel.load() }
         }
         .task(id: viewModel.selectedEmotion) {

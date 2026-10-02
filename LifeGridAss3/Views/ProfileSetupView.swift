@@ -96,24 +96,15 @@ struct ProfileSetupView: View {
     }
 
     private var header: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "square.grid.3x3.fill")
-                .font(.system(size: 42))
-                .foregroundStyle(.indigo)
-
-            Text(viewModel.isEditing ? "Your Profile" : "Build your LifeGrid")
-                .font(.largeTitle.bold())
-                .multilineTextAlignment(.center)
-
-            Text(
-                viewModel.isEditing
-                    ? "Update the information used to calculate your LifeGrid."
-                    : "Turn time into a gentle visual reminder to notice, reflect, and live intentionally."
-            )
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
+        LifeGridPageHeader(
+            context: viewModel.isEditing ? "Your time, your story" : "Begin here",
+            title: viewModel.isEditing ? "Your Profile" : "Build your LifeGrid",
+            subtitle: viewModel.isEditing
+                ? "Shape the frame behind your personal LifeGrid."
+                : "Turn time into a gentle reminder to live intentionally.",
+            symbol: "person.crop.circle.fill",
+            accent: .indigo
+        )
     }
 
     private var lifeGridPreview: some View {
@@ -314,50 +305,55 @@ private struct LifeWeekDetailView: View {
         return "Future week"
     }
 
+    private var statusColor: Color {
+        switch status {
+        case "Current week": .teal
+        case "Lived": .indigo
+        default: .secondary
+        }
+    }
+
+    private var dateRange: String {
+        guard
+            let start = profile.startDate(forLifeWeek: lifeWeekNumber),
+            let end = profile.endDate(forLifeWeek: lifeWeekNumber)
+        else { return "Date unavailable" }
+
+        return "\(start.formatted(date: .abbreviated, time: .omitted)) – \(end.formatted(date: .abbreviated, time: .omitted))"
+    }
+
     var body: some View {
         NavigationStack {
-            List {
-                Section("Week details") {
-                    LabeledContent("Life week", value: lifeWeekNumber.formatted())
-                    LabeledContent("Life year", value: (lifeWeekNumber / 52 + 1).formatted())
-                    LabeledContent("Status", value: status)
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        Color.indigo.opacity(0.16),
+                        Color.teal.opacity(0.09),
+                        Color(.systemBackground)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
 
-                    if let start = profile.startDate(forLifeWeek: lifeWeekNumber),
-                       let end = profile.endDate(forLifeWeek: lifeWeekNumber) {
-                        LabeledContent(
-                            "Dates",
-                            value: "\(start.formatted(date: .abbreviated, time: .omitted)) – \(end.formatted(date: .abbreviated, time: .omitted))"
-                        )
-                    }
-                }
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        weekHero
+                        weekFacts
 
-                Section("Private reflections") {
-                    if loadLifeEntries == nil {
-                        Text("Save your profile first to view reflections.")
-                            .foregroundStyle(.secondary)
-                    } else if entries.isEmpty {
-                        ContentUnavailableView(
-                            "No reflection for this week",
-                            systemImage: "lock.doc",
-                            description: Text("Your private reflections will appear here.")
-                        )
-                    } else {
-                        ForEach(entries) { entry in
-                            VStack(alignment: .leading, spacing: 6) {
-                                Text(entry.message)
-                                Text(entry.occurredAt.formatted(date: .abbreviated, time: .shortened))
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
+                        Text("Private reflections")
+                            .font(.system(.title2, design: .rounded, weight: .bold))
+
+                        reflectionContent
                     }
+                    .padding(20)
+                    .padding(.bottom, 30)
                 }
             }
-            .navigationTitle("Week \(lifeWeekNumber.formatted())")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
+                        .fontWeight(.semibold)
                 }
             }
             .task {
@@ -367,5 +363,122 @@ private struct LifeWeekDetailView: View {
                 )
             }
         }
+    }
+
+    private var weekHero: some View {
+        HStack(spacing: 16) {
+            WeekPulseAnimation()
+                .frame(width: 86, height: 86)
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text("A moment in your story")
+                    .font(.caption.weight(.bold))
+                    .tracking(0.8)
+                    .foregroundStyle(.indigo)
+                Text("Week \(lifeWeekNumber.formatted())")
+                    .font(.system(size: 30, weight: .heavy, design: .rounded))
+                Text(dateRange)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24))
+    }
+
+    private var weekFacts: some View {
+        HStack(spacing: 12) {
+            factCard(
+                value: (lifeWeekNumber / 52 + 1).formatted(),
+                label: "life year",
+                color: .indigo
+            )
+            factCard(
+                value: status,
+                label: "timeline",
+                color: statusColor
+            )
+        }
+    }
+
+    private func factCard(value: String, label: String, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(value)
+                .font(.headline)
+                .foregroundStyle(color)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+    }
+
+    @ViewBuilder
+    private var reflectionContent: some View {
+        if loadLifeEntries == nil {
+            messageCard(
+                icon: "lock.fill",
+                title: "Save your profile first",
+                message: "Then reflections for this week can appear here."
+            )
+        } else if entries.isEmpty {
+            messageCard(
+                icon: "moon.stars.fill",
+                title: "A quiet week",
+                message: "There is no private reflection saved for this week."
+            )
+        } else {
+            VStack(spacing: 12) {
+                ForEach(entries) { entry in
+                    HStack(alignment: .top, spacing: 12) {
+                        Circle()
+                            .fill(Color.teal)
+                            .frame(width: 10, height: 10)
+                            .padding(.top, 6)
+
+                        VStack(alignment: .leading, spacing: 7) {
+                            Text(entry.message)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            HStack {
+                                Label("Private", systemImage: "lock.fill")
+                                Spacer()
+                                Text(entry.occurredAt.formatted(date: .omitted, time: .shortened))
+                            }
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(16)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+                }
+            }
+        }
+    }
+
+    private func messageCard(
+        icon: String,
+        title: String,
+        message: String
+    ) -> some View {
+        VStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.largeTitle)
+                .foregroundStyle(.teal)
+            Text(title)
+                .font(.headline)
+            Text(message)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(28)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24))
     }
 }

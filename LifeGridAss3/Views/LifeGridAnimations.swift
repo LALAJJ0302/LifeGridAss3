@@ -105,3 +105,25 @@ struct PublicShareAnimation: View {
         }
     }
 }
+
+struct WeekPulseAnimation: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        ZStack {
+            if reduceMotion {
+                LottieView(animation: .named("support_pulse"))
+                    .currentProgress(1)
+                    .resizable()
+            } else {
+                LottieView(animation: .named("support_pulse"))
+                    .looping()
+                    .resizable()
+            }
+
+            Image(systemName: "calendar.badge.clock")
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundStyle(.white)
+        }
+    }
+}

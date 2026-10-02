@@ -33,6 +33,14 @@ struct LifeGridHomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
+                    LifeGridPageHeader(
+                        context: "Private space",
+                        title: "LifeGrid",
+                        subtitle: "Notice this week. Keep what matters.",
+                        symbol: "square.grid.3x3.fill",
+                        accent: .indigo
+                    )
+
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Week \(currentWeek.formatted())")
                             .font(.largeTitle.bold())
@@ -73,7 +81,6 @@ struct LifeGridHomeView: View {
                 await reloadCurrentWeek()
             }
             .background(Color.indigo.opacity(0.05))
-            .navigationTitle("LifeGrid")
         }
         .task(id: currentWeek) {
             await reloadCurrentWeek()

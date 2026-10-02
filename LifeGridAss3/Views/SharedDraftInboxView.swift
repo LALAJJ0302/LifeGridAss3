@@ -40,21 +40,25 @@ struct SharedDraftInboxView: View {
                 .ignoresSafeArea()
 
                 ScrollView {
-                    inboxContent
-                        .padding(20)
-                        .padding(.bottom, 80)
+                    VStack(spacing: 22) {
+                        LifeGridPageHeader(
+                            context: "Private inbox",
+                            title: "Shared Drafts",
+                            subtitle: "Review first. You decide what becomes yours.",
+                            symbol: "square.and.arrow.down.fill",
+                            accent: .indigo,
+                            actionSymbol: "arrow.clockwise",
+                            action: {
+                                Task { await viewModel.load() }
+                            }
+                        )
+
+                        inboxContent
+                    }
+                    .padding(20)
+                    .padding(.bottom, 80)
                 }
                 .refreshable { await viewModel.load() }
-            }
-            .navigationTitle("Shared Drafts")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        Task { await viewModel.load() }
-                    } label: {
-                        Label("Refresh drafts", systemImage: "arrow.clockwise")
-                    }
-                }
             }
         }
         .task { await viewModel.load() }
