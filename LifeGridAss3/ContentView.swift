@@ -84,6 +84,9 @@ struct ContentView: View {
                             repository: profileRepository
                         ),
                         existingProfile: profile,
+                        loadLifeEntries: LoadLifeEntriesForWeekUseCase(
+                            repository: lifeEntryRepository
+                        ),
                         onProfileCreated: viewModel.profileCreated
                     )
                     .tabItem {

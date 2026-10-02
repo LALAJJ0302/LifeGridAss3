@@ -47,4 +47,26 @@ struct UserProfile: Identifiable, Codable, Equatable, Sendable {
     ) -> Int {
         max(totalWeeksInFrame - weeksLived(asOf: date, calendar: calendar), 0)
     }
+
+    func startDate(
+        forLifeWeek week: Int,
+        calendar: Calendar = .current
+    ) -> Date? {
+        guard (0..<totalWeeksInFrame).contains(week) else { return nil }
+        return calendar.date(
+            byAdding: .day,
+            value: week * 7,
+            to: calendar.startOfDay(for: birthDate)
+        )
+    }
+
+    func endDate(
+        forLifeWeek week: Int,
+        calendar: Calendar = .current
+    ) -> Date? {
+        guard let startDate = startDate(forLifeWeek: week, calendar: calendar) else {
+            return nil
+        }
+        return calendar.date(byAdding: .day, value: 6, to: startDate)
+    }
 }

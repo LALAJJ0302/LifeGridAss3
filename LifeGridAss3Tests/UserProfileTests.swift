@@ -34,4 +34,27 @@ struct UserProfileTests {
         #expect(profile.weeksLived(asOf: today, calendar: calendar) == 4_160)
         #expect(profile.remainingWeeks(asOf: today, calendar: calendar) == 0)
     }
+
+    @Test("A life week has a seven-day date range from the birth date")
+    func lifeWeekDateRange() throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let birthDate = try #require(
+            calendar.date(from: DateComponents(year: 2000, month: 3, day: 2))
+        )
+        let profile = UserProfile(birthDate: birthDate)
+
+        let start = try #require(
+            profile.startDate(forLifeWeek: 2, calendar: calendar)
+        )
+        let end = try #require(
+            profile.endDate(forLifeWeek: 2, calendar: calendar)
+        )
+
+        #expect(
+            calendar.dateComponents([.day], from: birthDate, to: start).day == 14
+        )
+        #expect(
+            calendar.dateComponents([.day], from: start, to: end).day == 6
+        )
+    }
 }
