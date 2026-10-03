@@ -117,6 +117,17 @@ struct LifeGridHomeView: View {
 
             if entriesViewModel.isLoading && entriesViewModel.entries.isEmpty {
                 ProgressView("Loading private reflections…")
+            } else if let errorMessage = entriesViewModel.errorMessage {
+                ContentUnavailableView {
+                    Label("Reflections unavailable", systemImage: "exclamationmark.triangle.fill")
+                } description: {
+                    Text(errorMessage)
+                } actions: {
+                    Button("Try again") {
+                        Task { await reloadCurrentWeek() }
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
             } else if entriesViewModel.entries.isEmpty {
                 ContentUnavailableView(
                     "No reflections yet",

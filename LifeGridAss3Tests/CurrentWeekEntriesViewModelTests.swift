@@ -57,6 +57,22 @@ struct CurrentWeekEntriesViewModelTests {
         #expect(viewModel.entries == [entry])
     }
 
+    @Test("A private reflection storage failure is shown to the person")
+    @MainActor
+    func storageFailureIsVisible() async {
+        let repository = TestRepository(shouldFail: true)
+        let viewModel = CurrentWeekEntriesViewModel(
+            loadEntries: LoadLifeEntriesForWeekUseCase(
+                repository: repository
+            )
+        )
+
+        await viewModel.load(lifeWeekNumber: 1_250)
+
+        #expect(viewModel.entries.isEmpty)
+        #expect(viewModel.errorMessage?.contains("could not be opened") == true)
+    }
+
     private func makeEntry(
         message: String,
         time: TimeInterval,

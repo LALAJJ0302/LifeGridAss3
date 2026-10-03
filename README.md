@@ -179,7 +179,7 @@ No CloudKit container or internet connection is required for app data.
 
 ## Testing and verification
 
-The project currently contains **34 passing tests** covering:
+The project currently contains **37 passing tests** covering:
 
 - Use Case happy paths, boundaries, and domain errors;
 - repository failure translation into human-readable errors;

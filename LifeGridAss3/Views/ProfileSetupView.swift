@@ -297,6 +297,7 @@ private struct LifeWeekDetailView: View {
     let lifeWeekNumber: Int
     let loadLifeEntries: LoadLifeEntriesForWeekUseCase?
     @State private var entries: [LifeEntry] = []
+    @State private var loadErrorMessage: String?
 
     private var status: String {
         let currentWeek = profile.weeksLived()
@@ -358,9 +359,14 @@ private struct LifeWeekDetailView: View {
             }
             .task {
                 guard let loadLifeEntries else { return }
-                entries = await loadLifeEntries.execute(
-                    lifeWeekNumber: lifeWeekNumber
-                )
+                do {
+                    entries = try await loadLifeEntries.execute(
+                        lifeWeekNumber: lifeWeekNumber
+                    )
+                } catch {
+                    loadErrorMessage = (error as? LocalizedError)?.errorDescription
+                        ?? "This week could not be opened."
+                }
             }
         }
     }
@@ -426,6 +432,12 @@ private struct LifeWeekDetailView: View {
                 icon: "lock.fill",
                 title: "Save your profile first",
                 message: "Then reflections for this week can appear here."
+            )
+        } else if let loadErrorMessage {
+            messageCard(
+                icon: "exclamationmark.triangle.fill",
+                title: "Week unavailable",
+                message: loadErrorMessage
             )
         } else if entries.isEmpty {
             messageCard(

@@ -19,7 +19,7 @@ the target folders are included automatically.
 4. Press **Command-R** to run the app.
 5. Press **Command-U** to run all tests.
 
-The current verified result is a successful build with 34 passing tests.
+The current verified result is a successful build with 37 passing tests.
 
 ## If Xcode shows stale errors
 

@@ -27,4 +27,14 @@ struct LoadTreeHoleFeedUseCaseTests {
         #expect(allPosts == [newerHopeful, olderCalm])
         #expect(calmPosts == [olderCalm])
     }
+
+    @Test("A feed storage failure becomes a Tree Hole error")
+    func storageFailureIsTranslated() async {
+        let repository = TestRepository(shouldFail: true)
+        let useCase = LoadTreeHoleFeedUseCase(repository: repository)
+
+        await #expect(throws: LoadTreeHoleFeedError.couldNotOpenTreeHole) {
+            try await useCase.execute(matching: nil)
+        }
+    }
 }

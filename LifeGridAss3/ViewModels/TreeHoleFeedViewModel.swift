@@ -23,7 +23,12 @@ final class TreeHoleFeedViewModel: ObservableObject {
             posts = try await loadPosts.execute(matching: selectedEmotion)
         } catch {
             posts = []
-            errorMessage = "The local Tree Hole could not be loaded. Try again."
+            errorMessage = [
+                (error as? LocalizedError)?.errorDescription,
+                (error as? LocalizedError)?.recoverySuggestion
+            ]
+            .compactMap { $0 }
+            .joined(separator: " ")
         }
     }
 }

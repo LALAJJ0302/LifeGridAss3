@@ -5,6 +5,7 @@ import Foundation
 final class CurrentWeekEntriesViewModel: ObservableObject {
     @Published private(set) var entries: [LifeEntry] = []
     @Published private(set) var isLoading = false
+    @Published private(set) var errorMessage: String?
 
     private let loadEntries: LoadLifeEntriesForWeekUseCase
 
@@ -14,9 +15,23 @@ final class CurrentWeekEntriesViewModel: ObservableObject {
 
     func load(lifeWeekNumber: Int) async {
         isLoading = true
-        entries = await loadEntries.execute(lifeWeekNumber: lifeWeekNumber)
+        errorMessage = nil
+        defer { isLoading = false }
+
+        do {
+            entries = try await loadEntries.execute(
+                lifeWeekNumber: lifeWeekNumber
+            )
             .sorted { $0.occurredAt > $1.occurredAt }
-        isLoading = false
+        } catch {
+            entries = []
+            errorMessage = [
+                (error as? LocalizedError)?.errorDescription,
+                (error as? LocalizedError)?.recoverySuggestion
+            ]
+            .compactMap { $0 }
+            .joined(separator: " ")
+        }
     }
 
     func entrySaved(_ entry: LifeEntry) {

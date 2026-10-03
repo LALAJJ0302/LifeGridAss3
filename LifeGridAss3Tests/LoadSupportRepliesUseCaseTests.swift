@@ -32,4 +32,14 @@ struct LoadSupportRepliesUseCaseTests {
 
         #expect(replies == [older, newer])
     }
+
+    @Test("A reply storage failure becomes a supportive-replies error")
+    func storageFailureIsTranslated() async {
+        let repository = TestRepository(shouldFail: true)
+        let useCase = LoadSupportRepliesUseCase(repository: repository)
+
+        await #expect(throws: LoadSupportRepliesError.couldNotOpenReplies) {
+            try await useCase.execute(for: UUID())
+        }
+    }
 }

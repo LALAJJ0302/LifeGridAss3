@@ -41,7 +41,12 @@ final class SupportRepliesViewModel: ObservableObject {
         do {
             replies = try await loadReplies.execute(for: postID)
         } catch {
-            errorMessage = "Replies could not be loaded from this device. Try again."
+            errorMessage = [
+                (error as? LocalizedError)?.errorDescription,
+                (error as? LocalizedError)?.recoverySuggestion
+            ]
+            .compactMap { $0 }
+            .joined(separator: " ")
         }
     }
 

@@ -61,8 +61,9 @@ actor TestRepository:
         entries.first { $0.id == id }
     }
 
-    func entries(forLifeWeek week: Int) -> [LifeEntry] {
-        entries.filter { $0.lifeWeekNumber == week }
+    func entries(forLifeWeek week: Int) throws -> [LifeEntry] {
+        if shouldFail { throw TestError.forcedFailure }
+        return entries.filter { $0.lifeWeekNumber == week }
     }
 
     func savedEntries() -> [LifeEntry] {
@@ -81,8 +82,9 @@ actor TestRepository:
         matching emotionalState: EmotionalState?,
         since date: Date,
         limit: Int
-    ) -> [TreeHolePost] {
-        posts
+    ) throws -> [TreeHolePost] {
+        if shouldFail { throw TestError.forcedFailure }
+        return posts
             .filter {
                 $0.createdAt >= date
                     && (emotionalState == nil || $0.emotionalState == emotionalState)
