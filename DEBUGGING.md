@@ -1,90 +1,83 @@
 # LifeGrid Debugging Notes
 
-## Current Xcode symptoms
+## Open the correct project
 
-Xcode may display these errors in `LifeGridHomeView.swift`:
-
-- `Cannot find type 'CurrentWeekEntriesViewModel' in scope`
-- `Cannot find type 'LoadLifeEntriesForWeekUseCase' in scope`
-- `Cannot find 'CurrentWeekEntriesViewModel' in scope`
-
-It may also display several purple warnings saying that dynamic shadows are
-expensive to render.
-
-## Diagnosis
-
-The missing-type messages are stale Xcode index errors, not missing source
-code. Both types exist in the project:
-
-- `LifeGridAss3/ViewModels/CurrentWeekEntriesViewModel.swift`
-- `LifeGridAss3/UseCases/LoadLifeEntriesForWeekUseCase.swift`
-
-The project uses `PBXFileSystemSynchronizedRootGroup`, so Swift files placed
-inside the `LifeGridAss3` folder are automatically included in the app target.
-A command-line build has compiled these files successfully.
-
-The screenshot also shows an older in-memory copy of `LifeGridHomeView.swift`.
-The current file has a `publishTreeHolePost` dependency that is not visible in
-that screenshot. Xcode therefore needs to reload the files from disk.
-
-## Recovery steps in Xcode
-
-1. Save or discard any intentional unsaved edits in Xcode. Do not overwrite
-   the newer files on disk with the older editor copy.
-2. Close the LifeGrid project window.
-3. Reopen this exact project:
-   `/Users/jj/Documents/ChatGPT/Ad ios/LifeGridAss3/LifeGridAss3.xcodeproj`
-4. Select `Product > Clean Build Folder` while holding the Option key if the
-   menu item is not visible (`Shift-Command-K`).
-5. Wait for Xcode indexing to finish.
-6. Build with `Command-B`.
-
-If the same red messages remain after reopening:
-
-1. Quit Xcode completely.
-2. Reopen the same `.xcodeproj` path above.
-3. Select `File > Packages > Reset Package Caches` only if package-related
-   errors appear. LifeGrid currently has no external package dependency, so
-   this normally is not required.
-
-## Why deleting DerivedData is not the first step
-
-The app and test target already compile from a clean command-line build.
-Deleting all DerivedData is broad and can slow every Xcode project. Reloading
-this project is the smaller and safer fix for an editor holding stale files.
-
-## Purple dynamic-shadow warnings
-
-The purple messages are runtime performance diagnostics, not compiler errors.
-They do not prevent the app from building. SwiftUI materials and rounded cards
-can create dynamic shadows that are relatively expensive on the simulator.
-
-Treat these separately from the three red missing-type errors:
-
-- Red error: prevents compilation and must be resolved.
-- Purple warning: app can run, but rendering may be optimized later.
-
-For the assignment prototype, validate scrolling performance on a real device
-before replacing the visual design. If optimization becomes necessary, prefer
-a simple opaque card background and a small explicit shadow radius instead of
-stacked translucent materials.
-
-## Verification record
-
-Verified command:
+Open this project file:
 
 ```text
-xcodebuild -project LifeGridAss3.xcodeproj -scheme LifeGridAss3 \
-  -configuration Debug -destination 'generic/platform=iOS Simulator' \
-  CODE_SIGNING_ALLOWED=NO build-for-testing
+/Users/jj/Documents/ChatGPT/Ad ios/LifeGridAss3/LifeGridAss3.xcodeproj
 ```
 
-Verified result:
+The project uses file-system-synchronised Xcode groups, so Swift files inside
+the target folders are included automatically.
+
+## Normal build and test steps
+
+1. Wait until Swift Package Manager finishes resolving Lottie.
+2. Select the `LifeGridAss3` scheme and an iPhone simulator.
+3. Press **Command-B** to build.
+4. Press **Command-R** to run the app.
+5. Press **Command-U** to run all tests.
+
+The current verified result is a successful build with 34 passing tests.
+
+## If Xcode shows stale errors
+
+Sometimes Xcode's editor index shows red errors even though the project can
+build successfully.
+
+1. Save intentional edits.
+2. Close the project window.
+3. Reopen the `.xcodeproj` listed above.
+4. Choose **Product > Clean Build Folder** (`Shift-Command-K`).
+5. Wait for indexing to finish and build again.
+
+Deleting all DerivedData should be a last resort because it also removes
+cached packages and slows the next build.
+
+## If Lottie does not resolve
+
+Lottie 4.6.1 is installed through Swift Package Manager.
+
+1. Check the **Package Dependencies** section in Xcode.
+2. Choose **File > Packages > Resolve Package Versions**.
+3. Use **Reset Package Caches** only if normal resolution fails.
+
+An internet connection may be required the first time the package is
+downloaded. After it is cached, normal local builds do not require internet.
+
+## Core Animation console messages
+
+The iOS 27 Simulator may print this message while a Lottie view is starting or
+changing size:
 
 ```text
-** TEST BUILD SUCCEEDED **
+cannot add handler to 0 from 0 - dropping
 ```
 
-This result confirms that the app target and test target can see the new source
-files. It does not mean simulator tests executed; the local simulator service
-must be working for test execution.
+This is a Core Animation runtime diagnostic. It has not produced a crash,
+compiler warning, or failed test in LifeGrid. The animations also respect the
+Reduce Motion accessibility setting. Treat the message separately from red
+Swift compiler errors.
+
+## App Group checks
+
+If the Widget always says **Open LifeGrid**, or Shared Drafts remain empty:
+
+1. Open **Signing & Capabilities** for all three targets.
+2. Confirm the following App Group is enabled everywhere:
+
+```text
+group.LALAJJ0302.com.LifeGridAss3
+```
+
+3. Run the main app once before adding the Widget.
+4. Save a reflection, then return to the Home Screen to check the Widget.
+5. For Share Extension testing, share text or a web link from Simulator Safari
+   to **Save to LifeGrid**, then reopen the Shared Drafts tab.
+
+## SwiftData during testing
+
+The production app uses the on-device SwiftData store. Repository tests create
+an in-memory `SwiftDataLifeGridRepository`, so tests do not overwrite the
+person's saved simulator data.
